@@ -1,7 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LegalPage, { Dato, type LegalSection } from './LegalPage';
-import { ESTABLECIMIENTO, MESES_CONSERVACION_RESERVAS_NO_PAGADAS, RUTA_CONDICIONES, TITULAR } from './legalInfo';
+import { CONSERVACION, MARCA, REGISTRO_BASE_DATOS, RUTA_PROCESO, RUTA_TERMINOS, SERVICIO, TITULAR } from './legalInfo';
+
+/**
+ * PoliticaPrivacidad — /policy-privacy
+ * ---------------------------------------------------------
+ * Política de privacidad de Umbral (tours virtuales 360, Argentina).
+ *
+ * Normativa tenida en cuenta:
+ * - Ley 25.326 de Protección de los Datos Personales y Decreto 1558/2001
+ *   (información al titular, art. 6; consentimiento, art. 5; derechos, arts. 14 a 16;
+ *   transferencias internacionales, art. 12).
+ * - Disposición DNPDP 10/2008: leyenda obligatoria sobre el derecho de acceso
+ *   y la AAIP como órgano de control.
+ * - Código Civil y Comercial, art. 53 (derecho a la propia imagen).
+ */
 
 interface Finalidad {
   finalidad: string;
@@ -12,53 +26,46 @@ interface Finalidad {
 
 const FINALIDADES: Finalidad[] = [
   {
-    finalidad: 'Gestionar la reserva y la estancia (confirmación, instrucciones de llegada, atención durante la estancia)',
-    datos: 'Nombre, email, teléfono, fechas, número de huéspedes y adicionales',
-    base: 'Ejecución del contrato (art. 6.1.b RGPD)',
-    plazo: 'Durante la relación contractual y, después, mientras puedan derivarse responsabilidades (en general, 5 años)',
+    finalidad: 'Responder tu consulta y armar el presupuesto',
+    datos: 'Nombre, email, teléfono, tipo de espacio, zona, cantidad de ambientes y mensaje',
+    base: 'Tu consentimiento, que das al enviar el formulario (art. 5 de la Ley 25.326)',
+    plazo: `Hasta ${CONSERVACION.consultasMeses} meses desde el último contacto, si no contratás`,
   },
   {
-    finalidad: 'Cobrar la reserva y prevenir el fraude en los pagos',
-    datos: 'Importe, nombre, email y dirección de facturación. Los datos de la tarjeta los trata directamente Stripe',
-    base: 'Ejecución del contrato (art. 6.1.b) e interés legítimo en prevenir el fraude (art. 6.1.f)',
-    plazo: 'Lo exigido por la normativa contable y fiscal',
+    finalidad: 'Coordinar la visita, hacer las tomas, editar y publicar el tour',
+    datos: 'Datos de contacto, dirección del espacio, fotos 360 y contenido de los puntos de información',
+    base: 'La relación contractual con vos (art. 5, inc. 2.d, de la Ley 25.326)',
+    plazo: 'Mientras dure el servicio y el alojamiento del tour y, después, mientras puedan surgir reclamos',
   },
   {
-    finalidad: 'Emitir la factura y cumplir las obligaciones fiscales y contables',
-    datos: 'Nombre o razón social, NIF/NIE/CIF o documento extranjero, dirección e importes',
-    base: 'Obligación legal (art. 6.1.c): Ley 58/2003 General Tributaria, Real Decreto 1619/2012 y Código de Comercio',
-    plazo: '6 años (art. 30 del Código de Comercio) y, en todo caso, el plazo de prescripción tributaria',
+    finalidad: 'Facturar y cumplir las obligaciones fiscales y contables',
+    datos: 'Nombre o razón social, CUIT o DNI, condición fiscal, domicilio e importes',
+    base: 'Obligación legal: normativa de ARCA y Código Civil y Comercial',
+    plazo: '10 años (art. 328 del Código Civil y Comercial)',
   },
   {
-    finalidad: 'Registro documental de viajeros y comunicación al Ministerio del Interior',
-    datos:
-      'Los exigidos por el Real Decreto 933/2021: identidad, documento, nacionalidad, fecha de nacimiento, domicilio, contacto, relación de parentesco con menores y datos del contrato y del pago',
-    base: 'Obligación legal (art. 6.1.c): Ley Orgánica 4/2015 de protección de la seguridad ciudadana y Real Decreto 933/2021',
-    plazo: '3 años, como establece el Real Decreto 933/2021',
+    finalidad: 'Darte una cuenta de acceso y mantenerla segura',
+    datos: 'Email, verificación de la cuenta y registros de inicio de sesión',
+    base: 'Tu consentimiento al crear la cuenta y la relación contractual',
+    plazo: 'Mientras la cuenta esté activa',
   },
   {
-    finalidad: 'Atender consultas, incidencias y reclamaciones',
-    datos: 'Datos de contacto y contenido de la comunicación',
-    base: 'Ejecución del contrato (art. 6.1.b) y obligación legal en materia de consumo (art. 6.1.c)',
-    plazo: 'Hasta su resolución y, después, mientras puedan derivarse responsabilidades',
+    finalidad: 'Mostrar trabajos terminados en nuestro portfolio',
+    datos: 'El tour o capturas del tour, sin la dirección exacta de viviendas particulares',
+    base: 'Tu consentimiento, que podés retirar en cualquier momento',
+    plazo: 'Hasta que nos pidas sacarlo',
   },
   {
-    finalidad: 'Guardar la prueba de que se aceptaron las condiciones y se informó de esta política',
-    datos: 'Casillas marcadas, versión del texto, fecha y hora, dirección IP y navegador',
-    base: 'Obligación legal de poder demostrarlo (arts. 5.2 y 7.1 RGPD) e interés legítimo (art. 6.1.f)',
-    plazo: 'Mientras se conserve la reserva',
+    finalidad: 'Guardar la prueba de que aceptaste esta política',
+    datos: 'Casilla marcada, versión del texto, fecha y hora, dirección IP',
+    base: 'Acreditar el consentimiento que exige la ley (art. 5 de la Ley 25.326)',
+    plazo: 'Mientras conservemos los datos a los que se refiere',
   },
   {
-    finalidad: 'Enviar ofertas y novedades de Quinta de Argos por correo electrónico',
-    datos: 'Nombre y email',
-    base: 'Consentimiento (art. 6.1.a RGPD y art. 21 LSSI-CE), solo si se marcó la casilla correspondiente',
-    plazo: 'Hasta que se retire el consentimiento',
-  },
-  {
-    finalidad: 'Mantener la seguridad y el funcionamiento técnico del sitio web',
+    finalidad: 'Mantener el sitio seguro y evitar abusos',
     datos: 'Dirección IP, navegador y registros técnicos del servidor',
-    base: 'Interés legítimo en proteger el servicio (art. 6.1.f)',
-    plazo: 'Periodos cortos, salvo que sean necesarios para investigar un incidente',
+    base: 'Deber de seguridad de los datos (art. 9 de la Ley 25.326)',
+    plazo: 'Períodos cortos, salvo que hagan falta para investigar un incidente',
   },
 ];
 
@@ -68,24 +75,20 @@ interface Proveedor {
   ubicacion: string;
 }
 
+// TODO (Angus): revisá que la lista coincida con lo que usás en producción.
 const PROVEEDORES: Proveedor[] = [
-  {
-    nombre: 'Stripe',
-    servicio:
-      'Procesamiento de pagos. Para la prevención del fraude y el cumplimiento de la normativa financiera actúa como responsable independiente, según su propia política de privacidad',
-    ubicacion: 'UE y EE. UU.',
-  },
-  { nombre: 'Beds24', servicio: 'Gestión de reservas y sincronización de disponibilidad del alojamiento', ubicacion: 'Según su contrato de encargo' },
-  { nombre: 'MongoDB Atlas', servicio: 'Base de datos de las reservas', ubicacion: 'Según la región contratada' },
+  { nombre: 'Cloudinary', servicio: 'Almacenamiento y entrega de las fotos 360 y de los tours publicados', ubicacion: 'EE. UU. y red global' },
+  { nombre: 'Firebase (Google)', servicio: 'Cuentas de acceso y verificación del email', ubicacion: 'EE. UU.' },
+  { nombre: 'MongoDB Atlas', servicio: 'Base de datos de tours y consultas', ubicacion: 'Según la región contratada' },
   { nombre: 'Render', servicio: 'Alojamiento del servidor y de la web', ubicacion: 'EE. UU. / UE' },
-  { nombre: 'Cloudflare', servicio: 'Gestión del dominio y seguridad de la web', ubicacion: 'Red global' },
-  { nombre: 'Brevo', servicio: 'Envío de correos electrónicos de la reserva', ubicacion: 'UE' },
+  { nombre: 'Google Fonts', servicio: 'Tipografías del sitio (recibe la dirección IP al cargarlas)', ubicacion: 'EE. UU.' },
+  { nombre: 'PENDIENTE: proveedor de correo', servicio: 'Envío de emails de la cuenta y respuestas a consultas', ubicacion: 'PENDIENTE' },
 ];
 
 const secciones: LegalSection[] = [
   {
     id: 'responsable',
-    titulo: 'Responsable del tratamiento',
+    titulo: 'Quién es responsable de tus datos',
     contenido: (
       <>
         <dl className="legal-dl">
@@ -93,9 +96,9 @@ const secciones: LegalSection[] = [
           <dd>
             <Dato valor={TITULAR.nombre} />
           </dd>
-          {/* <dt>NIF</dt>
+          {/* <dt>CUIT</dt>
           <dd>
-            <Dato valor={TITULAR.nif} />
+            <Dato valor={TITULAR.cuit} />
           </dd>
           <dt>Domicilio</dt>
           <dd>
@@ -109,7 +112,15 @@ const secciones: LegalSection[] = [
           <dd>
             <Dato valor={TITULAR.telefono} />
           </dd>
+          <dt>Base de datos</dt>
+          <dd>
+            <Dato valor={REGISTRO_BASE_DATOS} />
+          </dd>
         </dl>
+        <p>
+          Esta política se aplica al sitio {MARCA.web}, al formulario de contacto, a las cuentas de acceso, a los tours
+          que publicamos y a las visitas en las que hacemos las tomas.
+        </p>
       </>
     ),
   },
@@ -120,44 +131,57 @@ const secciones: LegalSection[] = [
       <>
         <ul className="legal-list">
           <li>
-            <strong>Datos de la reserva y de contacto:</strong> nombre y apellidos, correo electrónico, teléfono,
-            fechas de estancia, número de huéspedes y servicios adicionales.
+            <strong>Consultas:</strong> nombre, email, teléfono, el tipo de espacio, la zona, la cantidad de ambientes y
+            lo que nos escribas. También la fecha y hora del envío y la dirección IP, para frenar el spam.
           </li>
           <li>
-            <strong>Datos de facturación:</strong> nombre o razón social, documento (DNI, NIE, CIF, pasaporte o
-            documento extranjero) y dirección.
+            <strong>Clientes:</strong> los datos para coordinar la visita (incluida la dirección del espacio) y para
+            facturar: nombre o razón social, CUIT o DNI, condición fiscal y domicilio.
           </li>
           <li>
-            <strong>Datos del pago:</strong> importe, fecha y referencia de la operación. No recibimos ni guardamos el
-            número completo de la tarjeta: lo trata directamente Stripe.
+            <strong>Cuentas de acceso:</strong> email y estado de verificación. La contraseña la gestiona Firebase y
+            nosotros nunca la vemos ni la guardamos.
           </li>
           <li>
-            <strong>Datos del registro de viajeros:</strong> los que exige el Real Decreto 933/2021 a todos los
-            huéspedes, que se solicitan antes de la llegada.
+            <strong>Fotos y tours:</strong> las imágenes 360 de cada espacio y los textos de los puntos de información.
           </li>
           <li>
-            <strong>Prueba de aceptación:</strong> qué casillas se marcaron, la versión del texto aceptado, la fecha y
-            hora, la dirección IP y el navegador utilizado.
-          </li>
-          <li>
-            <strong>Comunicaciones:</strong> los mensajes que intercambiemos contigo.
+            <strong>Datos técnicos:</strong> dirección IP, navegador y registros del servidor, y tu preferencia de tema
+            claro u oscuro, que queda guardada en tu navegador.
           </li>
         </ul>
         <p>
-          Todos los datos marcados como obligatorios en el formulario son necesarios para formalizar la reserva,
-          cobrarla, facturarla y cumplir las obligaciones legales del alojamiento. Si no se facilitan, no es posible
-          completar la reserva. Si reservas para otras personas, debes informarles de esta política.
+          Los campos marcados como obligatorios en cada formulario son necesarios para responderte o prestarte el
+          servicio; si no los completás, no podemos avanzar. El resto es opcional. Si nos das datos de otra persona (por
+          ejemplo, quien nos abre la puerta), tenés que avisarle de esta política.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'fotos',
+    titulo: 'Personas y datos que aparecen en las fotos',
+    contenido: (
+      <>
+        <p>
+          Una cámara 360 ve todo alrededor. Por eso pedimos que no haya nadie en el ambiente durante cada toma y te
+          pasamos una lista para dejar el espacio listo (podés verla en <Link to={RUTA_PROCESO}>Proceso</Link>).
         </p>
         <p>
-          Las reservas solo pueden hacerlas mayores de 18 años. Los datos de los huéspedes menores solo se tratan para
-          cumplir el registro de viajeros y los facilita el adulto responsable.
+          Si igual aparece una persona, una patente, un documento, una foto familiar o cualquier dato que no deba verse,
+          lo <strong>difuminamos antes de subir la imagen</strong>. La versión sin difuminar nunca se publica ni sale de
+          nuestros equipos, y la borramos a los {SERVICIO.conservacionOriginalesDias} días de entregar el tour. Si
+          después encontrás algo más para tapar, escribinos y lo difuminamos sin costo.
+        </p>
+        <p>
+          Así respetamos el derecho a la propia imagen que reconoce el artículo 53 del Código Civil y Comercial.
         </p>
       </>
     ),
   },
   {
     id: 'finalidades',
-    titulo: 'Para qué los usamos, con qué base legal y durante cuánto tiempo',
+    titulo: 'Para qué los usamos, con qué base y por cuánto tiempo',
     contenido: (
       <>
         <div className="legal-table-wrap">
@@ -166,7 +190,7 @@ const secciones: LegalSection[] = [
               <tr>
                 <th scope="col">Finalidad</th>
                 <th scope="col">Datos</th>
-                <th scope="col">Base jurídica</th>
+                <th scope="col">Base</th>
                 <th scope="col">Conservación</th>
               </tr>
             </thead>
@@ -174,42 +198,35 @@ const secciones: LegalSection[] = [
               {FINALIDADES.map((f) => (
                 <tr key={f.finalidad}>
                   <th scope="row">{f.finalidad}</th>
-                  <td>{f.datos}</td>
-                  <td>{f.base}</td>
-                  <td>{f.plazo}</td>
+                  <td data-label="Datos">{f.datos}</td>
+                  <td data-label="Base">{f.base}</td>
+                  <td data-label="Conservación">{f.plazo}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <p>
-          Las reservas que se inician pero no llegan a pagarse se eliminan o anonimizan en un plazo máximo de{' '}
-          {MESES_CONSERVACION_RESERVAS_NO_PAGADAS} meses. Al terminar los plazos indicados, los datos se suprimen o se
-          bloquean durante el tiempo en que puedan ser requeridos por jueces, tribunales o administraciones públicas,
-          como prevé el artículo 32 de la LOPDGDD.
+          Cuando termina cada plazo, borramos los datos o los dejamos anónimos. No usamos tus datos para fines distintos
+          de los que figuran acá, no armamos perfiles y no tomamos decisiones automáticas sobre vos.
         </p>
         <p>
-          No tomamos decisiones basadas únicamente en tratamientos automatizados que produzcan efectos jurídicos sobre
-          ti. Stripe aplica sistemas automáticos de detección de fraude que, excepcionalmente, pueden rechazar un pago;
-          si ocurre, puedes contactarnos y lo revisaremos.
+          No te enviamos publicidad. Si algún día lo hacemos, te vamos a pedir permiso antes y vas a poder darte de baja
+          en cualquier momento.
         </p>
       </>
     ),
   },
   {
     id: 'destinatarios',
-    titulo: 'A quién comunicamos los datos',
+    titulo: 'A quién se comunican',
     contenido: (
       <>
-        <p>No vendemos ni cedemos tus datos a terceros con fines comerciales. Solo los comunicamos a:</p>
+        <p>No vendemos ni cedemos tus datos. Solo acceden a ellos:</p>
         <ul className="legal-list">
           <li>
-            <strong>Administraciones públicas</strong> cuando la ley lo exige: el Ministerio del Interior (registro de
-            viajeros a través de SES.Hospedajes), la Agencia Tributaria y, en su caso, jueces y tribunales.
-          </li>
-          <li>
-            <strong>Proveedores que nos prestan servicios</strong> necesarios para gestionar la web y las reservas,
-            que acceden a los datos solo para ese fin y con contrato de encargo de tratamiento:
+            <strong>Proveedores que nos prestan servicios técnicos</strong>, solo para ese fin y bajo sus condiciones de
+            confidencialidad:
           </li>
         </ul>
         <div className="legal-table-wrap">
@@ -218,37 +235,45 @@ const secciones: LegalSection[] = [
               <tr>
                 <th scope="col">Proveedor</th>
                 <th scope="col">Servicio</th>
-                <th scope="col">Ubicación del tratamiento</th>
+                <th scope="col">Ubicación</th>
               </tr>
             </thead>
             <tbody>
               {PROVEEDORES.map((p) => (
                 <tr key={p.nombre}>
-                  <th scope="row">{p.nombre}</th>
-                  <td>{p.servicio}</td>
-                  <td>{p.ubicacion}</td>
+                  <th scope="row">
+                    <Dato valor={p.nombre} />
+                  </th>
+                  <td data-label="Servicio">{p.servicio}</td>
+                  <td data-label="Ubicación">
+                    <Dato valor={p.ubicacion} />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p>
-          Las plataformas en las que también se anuncia el alojamiento (como Booking.com o Airbnb) solo reciben la
-          ocupación de las fechas para evitar dobles reservas, no tus datos personales.
-        </p>
+        <ul className="legal-list">
+          <li>
+            <strong>Organismos públicos</strong>, cuando una ley o una orden judicial lo exige (por ejemplo, ARCA).
+          </li>
+          <li>
+            <strong>Quien tenga el link de un tour publicado.</strong> Los tours son públicos para quien tenga la
+            dirección y el cliente decide dónde compartirlos o insertarlos. Se pueden despublicar en cualquier momento.
+          </li>
+        </ul>
       </>
     ),
   },
   {
     id: 'transferencias',
-    titulo: 'Transferencias internacionales',
+    titulo: 'Datos guardados fuera de Argentina',
     contenido: (
       <p>
-        Algunos de los proveedores anteriores pueden tratar datos fuera del Espacio Económico Europeo, principalmente
-        en Estados Unidos. En esos casos, la transferencia se ampara en garantías adecuadas previstas en el RGPD: la
-        adhesión del proveedor al Marco de Privacidad de Datos UE-EE. UU. (decisión de adecuación de la Comisión
-        Europea) o la firma de las cláusulas contractuales tipo aprobadas por la Comisión. Puedes solicitar más
-        información sobre estas garantías en el correo de contacto.
+        Varios de los proveedores anteriores tienen sus servidores fuera del país, principalmente en Estados Unidos y la
+        Unión Europea. Esas transferencias se hacen con los resguardos que exige el artículo 12 de la Ley 25.326 y la
+        normativa de la Agencia de Acceso a la Información Pública, como las cláusulas contractuales de protección de
+        datos. Si querés más detalle, escribinos.
       </p>
     ),
   },
@@ -257,55 +282,55 @@ const secciones: LegalSection[] = [
     titulo: 'Tus derechos',
     contenido: (
       <>
-        <p>Puedes ejercer en cualquier momento, de forma gratuita, los siguientes derechos:</p>
+        <p>En cualquier momento, y sin costo, podés pedirnos:</p>
         <ul className="legal-list">
           <li>
-            <strong>Acceso:</strong> saber qué datos tuyos tratamos.
+            <strong>Acceso:</strong> saber qué datos tuyos tenemos. Te respondemos dentro de los 10 días corridos.
           </li>
           <li>
-            <strong>Rectificación:</strong> corregir datos inexactos o incompletos.
+            <strong>Rectificación y actualización:</strong> corregir datos que estén mal o incompletos.
           </li>
           <li>
-            <strong>Supresión:</strong> pedir que se borren, salvo que debamos conservarlos por obligación legal.
+            <strong>Supresión:</strong> que los borremos, salvo los que tengamos que guardar por ley.
           </li>
           <li>
-            <strong>Oposición</strong> al tratamiento basado en interés legítimo, y a las comunicaciones comerciales.
-          </li>
-          <li>
-            <strong>Limitación</strong> del tratamiento en los casos previstos en el RGPD.
-          </li>
-          <li>
-            <strong>Portabilidad:</strong> recibir los datos que nos facilitaste en un formato estructurado.
-          </li>
-          <li>
-            <strong>Retirar el consentimiento</strong> para comunicaciones comerciales, sin que afecte a los envíos
-            anteriores. También puedes hacerlo desde el enlace de baja incluido en cada correo.
+            <strong>Retirar tu consentimiento</strong>, por ejemplo para que un trabajo deje de estar en el portfolio.
           </li>
         </ul>
         <p>
-          Para ejercerlos, escribe a <Dato valor={TITULAR.email} /> indicando el derecho que quieres ejercer. Si hay
-          dudas razonables sobre tu identidad, podremos pedirte información adicional para confirmarla. Responderemos
-          en el plazo de un mes, ampliable en dos meses más en casos complejos, como prevé el RGPD.
+          Escribinos a <Dato valor={TITULAR.email} /> contando qué querés hacer. Si tenemos dudas razonables sobre tu
+          identidad, te podemos pedir que la acredites. Los pedidos de rectificación, actualización o supresión los
+          resolvemos dentro de los 5 días hábiles, como fija el artículo 16 de la Ley 25.326.
+        </p>
+        <p className="legal-quote">
+          El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma
+          gratuita a intervalos no inferiores a seis meses, salvo que se acredite un interés legítimo al efecto conforme
+          lo establecido en el artículo 14, inciso 3 de la Ley Nº 25.326. La Agencia de Acceso a la Información Pública,
+          en su carácter de Órgano de Control de la Ley Nº 25.326, tiene la atribución de atender las denuncias y
+          reclamos que interpongan quienes resulten afectados en sus derechos por incumplimiento de las normas vigentes
+          en materia de protección de datos personales.
         </p>
         <p>
-          Si consideras que no hemos atendido correctamente tu solicitud, puedes presentar una reclamación ante la{' '}
-          <strong>Agencia Española de Protección de Datos</strong> (C/ Jorge Juan, 6, 28001 Madrid ·{' '}
-          <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">
-            www.aepd.es
+          Podés contactar a la AAIP en{' '}
+          <a href="https://www.argentina.gob.ar/aaip" target="_blank" rel="noopener noreferrer">
+            argentina.gob.ar/aaip
           </a>
-          ).
+          .
         </p>
       </>
     ),
   },
   {
     id: 'seguridad',
-    titulo: 'Seguridad',
+    titulo: 'Cómo los protegemos',
     contenido: (
-      <p>
-        Aplicamos medidas técnicas y organizativas adecuadas para proteger los datos: conexión cifrada (HTTPS) en todo
-        el sitio, pagos a través de una pasarela certificada, y envío a cada proveedor solo de los datos imprescindibles para su servicio.
-      </p>
+      <ul className="legal-list">
+        <li>Conexión cifrada (HTTPS) en todo el sitio y en los tours.</li>
+        <li>Contraseñas gestionadas por Firebase y sesión en una cookie que el navegador no deja leer a otros scripts.</li>
+        <li>El panel donde se arman los tours solo lo usan personas autorizadas, con verificación adicional.</li>
+        <li>Las fotos se difuminan antes de subirse, y las subidas van firmadas desde nuestro servidor.</li>
+        <li>Cada proveedor recibe solo los datos que necesita para su servicio.</li>
+      </ul>
     ),
   },
   {
@@ -313,20 +338,28 @@ const secciones: LegalSection[] = [
     titulo: 'Cookies y almacenamiento en el navegador',
     contenido: (
       <>
-        <p>
-          Este sitio web solo utiliza cookies y almacenamiento local de carácter técnico, necesarios para que funcione
-          el servicio que solicitas, por lo que están exentos de consentimiento según el artículo 22.2 de la LSSI-CE:
-        </p>
+        <p>Solo usamos cookies y almacenamiento técnico, necesario para que el sitio funcione:</p>
         <ul className="legal-list">
-          <li>Almacenamiento de la sesión del navegador para no perder la reserva en curso si recargas la página.</li>
-          <li>Preferencia de tema claro u oscuro.</li>
-          <li>Cookies de Stripe necesarias para procesar el pago de forma segura y prevenir el fraude.</li>
+          <li>La cookie de sesión, mientras tenés la cuenta abierta.</li>
+          <li>Tu preferencia de tema claro u oscuro.</li>
+          <li>Tu respuesta al aviso de cookies, para no volver a mostrártelo.</li>
         </ul>
         <p>
-          No utilizamos cookies analíticas ni publicitarias. Si en el futuro se incorporan, se pedirá tu
-          consentimiento previo y se actualizará esta política.
+          No usamos cookies analíticas ni publicitarias. Los tours insertados en otras webs no dejan cookies propias:
+          solo cargan las imágenes desde Cloudinary. Si en el futuro sumamos herramientas de medición, te vamos a pedir
+          permiso antes y lo vamos a informar acá.
         </p>
       </>
+    ),
+  },
+  {
+    id: 'menores',
+    titulo: 'Menores de edad',
+    contenido: (
+      <p>
+        Nuestros servicios están pensados para mayores de 18 años. No pedimos ni guardamos a sabiendas datos de menores;
+        si detectamos que nos llegaron, los borramos.
+      </p>
     ),
   },
   {
@@ -334,10 +367,9 @@ const secciones: LegalSection[] = [
     titulo: 'Cambios en esta política',
     contenido: (
       <p>
-        Podemos actualizar esta política para adaptarla a cambios legales o del servicio. La versión y la fecha de
-        actualización figuran al principio de la página, y en cada reserva queda registrada la versión vigente en ese
-        momento. Las condiciones de contratación están en la página de{' '}
-        <Link to={RUTA_CONDICIONES}>condiciones de reserva</Link>.
+        Podemos actualizar esta política por cambios legales o del servicio. La versión y la fecha figuran arriba de todo,
+        y si el cambio es importante te lo vamos a avisar por email. Las condiciones del servicio están en los{' '}
+        <Link to={RUTA_TERMINOS}>términos y condiciones</Link>.
       </p>
     ),
   },
@@ -349,10 +381,9 @@ const PoliticaPrivacidad: React.FC = () => (
     titulo="Política de privacidad"
     intro={
       <p>
-        En {ESTABLECIMIENTO.nombreComercial} tratamos tus datos con el mismo cuidado que la casa: solo los
-        imprescindibles, para lo que los necesitamos y durante el tiempo que exige la ley. Aquí te explicamos, conforme
-        al Reglamento General de Protección de Datos (RGPD) y a la Ley Orgánica 3/2018 (LOPDGDD), qué datos tratamos,
-        para qué y cuáles son tus derechos.
+        En {MARCA.nombreComercial} entramos a casas, hoteles y locales, así que cuidamos lo que se ve y lo que no. Acá te
+        contamos, conforme a la Ley 25.326 de Protección de los Datos Personales, qué datos tratamos, para qué, durante
+        cuánto tiempo y cómo podés ejercer tus derechos.
       </p>
     }
     secciones={secciones}

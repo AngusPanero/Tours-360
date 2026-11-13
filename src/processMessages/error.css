@@ -1,42 +1,51 @@
-/* Pantalla de error — DeepDev · prefijo error- */
-@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700&family=Geist:wght@300;400;500;600&display=swap");
+/* ─────────────────────────────────────────────────────────────────────
+   Error — Umbral
+   Prefijo: error-  ·  Tema escopeado a theme-dark / theme-light
+   La cuenta regresiva es una regla de rumbo 360°: en los segundos de espera
+   la escena da una vuelta completa y la línea se llena hasta volver al inicio.
+   ───────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Hanken+Grotesk:wght@400;500;600&display=swap");
+
+.error-page {
+    --display: "Archivo", "Hanken Grotesk", system-ui, sans-serif;
+    --font: "Hanken Grotesk", system-ui, sans-serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --mx: max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-left));
+    --line: rgba(var(--fg-rgb), 0.14);
+    --muted: rgba(var(--fg-rgb), 0.62);
+    --faint: rgba(var(--fg-rgb), 0.28);
+    --wait: 5s; /* igual a REDIRECT_S */
+
+    position: relative;
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(96px, 15vh, 168px) var(--mx) clamp(32px, 6vh, 72px);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: clamp(15px, 1.1vw, 17px);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    transition: background-color 0.6s ease, color 0.6s ease;
+}
 
 .error-page.theme-dark {
-    --error-bg: #0A1421;
-    --error-fg: #E7F3F7;
-    --error-fg-rgb: 231, 243, 247;
-    --error-accent: #4B92F4;
-    --error-tone: #F28B7D;
+    --bg: #050506;
+    --fg: #f5f5f2;
+    --fg-rgb: 245, 245, 242;
+    --accent: #d4ff3f;
+    --accent-fill: #d4ff3f;
 }
 
 .error-page.theme-light {
-    --error-bg: #E7F3F7;
-    --error-fg: #0A1421;
-    --error-fg-rgb: 10, 20, 33;
-    --error-accent: #2F78E8;
-    --error-tone: #C2412F;
-}
-
-.error-page {
-    --error-display: "Funnel Display", "Geist", system-ui, sans-serif;
-    --error-font: "Geist", system-ui, sans-serif;
-    --error-grad: linear-gradient(90deg, #91BEF6, #4B92F4);
-    --error-line: rgba(var(--error-fg-rgb), 0.16);
-    --error-ease: cubic-bezier(0.16, 1, 0.3, 1);
-
-    box-sizing: border-box;
-    display: flex;
-    align-items: flex-end;
-    min-height: 100vh;
-    min-height: 100svh;
-    /* arriba deja lugar al navbar fijo del sitio */
-    padding: calc(80px + clamp(24px, 6vh, 72px)) max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-right))
-        max(clamp(28px, 6vh, 64px), env(safe-area-inset-bottom)) max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-left));
-    background: var(--error-bg);
-    color: var(--error-fg);
-    font-family: var(--error-font);
-    font-style: normal;
-    overflow-x: clip;
+    --bg: #efede6;
+    --fg: #0b0b0c;
+    --fg-rgb: 11, 11, 12;
+    --accent: #4b6a00;
+    --accent-fill: #d4ff3f;
 }
 
 .error-page *,
@@ -45,110 +54,170 @@
     box-sizing: border-box;
 }
 
-.error-inner {
-    width: 100%;
-    container-type: inline-size;
+.error-page :where(h1, p) {
+    margin: 0;
 }
 
-/* ── Rótulo ───────────────────────────────────── */
+.error-page :where(button) {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.error-page :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.error-page ::selection {
+    background: var(--accent-fill);
+    color: #050506;
+}
+
+.error-inner {
+    display: grid;
+    gap: clamp(20px, 3.6vh, 44px);
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* ── Rótulo: raya de acento + texto ── */
 .error-label {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 0 0 clamp(20px, 3vh, 32px);
-    font: 500 14px / 1.3 var(--error-font);
-    color: rgba(var(--error-fg-rgb), 0.64);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--muted);
+    opacity: 0;
+    animation: error-fade 0.9s var(--ease-out) 0.1s forwards;
 }
 
 .error-dash {
+    flex: none;
     width: 28px;
     height: 1px;
-    background: var(--error-tone);
+    background: var(--accent);
+    transform-origin: left;
+    animation: error-draw 0.9s var(--ease-out) 0.2s both;
 }
 
-/* ── Título con máscara ───────────────────────── */
+/* ── Título: cada palabra sube desde atrás de una línea ── */
 .error-title {
-    margin: 0;
-    max-width: 16ch;
-    font: 500 clamp(44px, min(8.6cqi, 15vh), 168px) / 0.92 var(--error-display);
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.24em;
+    max-width: 15ch;
+    font-family: var(--display);
+    font-stretch: 122%;
+    font-weight: 600;
+    font-size: clamp(44px, min(8.2vw, 15vh), 168px);
+    line-height: 0.9;
     letter-spacing: -0.05em;
-    text-wrap: balance;
 }
 
 .error-title--long {
-    max-width: 24ch;
-    font-size: clamp(30px, min(4.8cqi, 8vh), 84px);
-    line-height: 1;
-    letter-spacing: -0.04em;
+    max-width: 22ch;
+    font-size: clamp(34px, min(5.4vw, 10vh), 104px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
 }
 
 .error-mask {
     display: inline-block;
-    max-width: 100%;
     overflow: hidden;
     padding-bottom: 0.1em;
-    margin: 0 0.24em -0.1em 0;
-    vertical-align: top;
+    margin-bottom: -0.1em;
 }
 
 .error-in {
     display: inline-block;
-    max-width: 100%;
-    /* una palabra larga (ej: el ID de un incidente) pasa a la línea siguiente */
-    overflow-wrap: anywhere;
     transform: translateY(110%);
-    animation: error-rise 1.1s var(--error-ease) forwards;
-    animation-delay: calc(min(var(--d), 14) * 55ms + 120ms);
+    animation: error-rise 1.1s var(--ease-out) forwards;
+    animation-delay: calc(0.18s + var(--d) * 65ms);
 }
 
 .error-accent {
-    background: var(--error-tone);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--accent);
 }
 
-/* ── Línea que se completa en 5 s ─────────────── */
+/* ── Regla de rumbo: las marcas corren, la línea se llena ── */
 .error-timer {
     position: relative;
-    height: 1px;
-    margin-top: clamp(32px, 7vh, 88px);
-    background: var(--error-line);
+    height: 30px;
     overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
+/* Línea base y su relleno con el tiempo de espera */
+.error-timer::before,
+.error-timer::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+}
+
+.error-timer::before {
+    background: var(--line);
+}
+
+.error-timer::after {
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: error-fill var(--wait) linear forwards;
+}
+
+/* Marcas: chicas cada 12px, grandes cada 72px. Corren una vuelta completa */
 .error-timer span {
     position: absolute;
-    inset: 0;
-    background: var(--error-tone);
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    animation: error-timer 5s linear forwards;
+    top: 1px;
+    left: 0;
+    width: calc(100% + 72px * 6);
+    height: 100%;
+    background:
+        repeating-linear-gradient(90deg, rgba(var(--fg-rgb), 0.42) 0 1px, transparent 1px 72px) 0 0 / 100% 14px no-repeat,
+        repeating-linear-gradient(90deg, rgba(var(--fg-rgb), 0.18) 0 1px, transparent 1px 12px) 0 0 / 100% 7px no-repeat;
+    animation: error-turn var(--wait) cubic-bezier(0.45, 0, 0.2, 1) forwards;
 }
 
-/* ── Pie: cuenta regresiva + botón tipo línea ─── */
+/* ── Pie: aviso de redirección + botón ── */
 .error-foot {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 16px 32px;
-    padding-top: clamp(16px, 2.4vh, 24px);
+    opacity: 0;
+    animation: error-fade 0.9s var(--ease-out) 0.5s forwards;
 }
 
 .error-redirect {
-    margin: 0;
-    font: 400 clamp(15px, 1.1vw, 17px) / 1.5 var(--error-font);
-    color: rgba(var(--error-fg-rgb), 0.64);
+    color: var(--muted);
+    text-wrap: pretty;
 }
 
 .error-sec {
     display: inline-block;
     min-width: 1ch;
-    color: var(--error-fg);
+    font-family: var(--display);
+    font-stretch: 112%;
+    font-weight: 600;
+    color: var(--accent);
     font-variant-numeric: tabular-nums;
+    text-align: center;
 }
 
+/* ── Botón tipo línea ── */
 .error-line {
     position: relative;
     display: inline-flex;
@@ -156,13 +225,31 @@
     gap: 0.5em;
     min-height: 44px;
     padding: 0.3em 0 0.38em;
-    border: 0;
-    background: none;
-    color: var(--error-fg);
-    font: 500 clamp(18px, 1.5vw, 22px) / 1 var(--error-display);
+    font: 500 clamp(16px, 1.15vw, 18px) / 1 var(--display);
+    font-stretch: 108%;
     letter-spacing: -0.015em;
     white-space: nowrap;
-    cursor: pointer;
+}
+
+.error-line::before,
+.error-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+}
+
+.error-line::before {
+    background: var(--line);
+}
+
+.error-line::after {
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform 0.7s var(--ease-out);
 }
 
 .error-line-txt {
@@ -174,38 +261,19 @@
 
 .error-line-txt span {
     display: inline-block;
-    text-shadow: 0 1.2em 0 var(--error-tone);
-    transition: transform 0.6s var(--error-ease);
+    text-shadow: 0 1.2em 0 var(--accent);
+    transition: transform 0.6s var(--ease-out);
     transition-delay: calc(var(--i) * 14ms);
 }
 
-.error-line::before,
-.error-line::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1.5px;
-}
-
-.error-line::before {
-    background: rgba(var(--error-fg-rgb), 0.9);
-}
-
-.error-line::after {
-    background: var(--error-tone);
-    transform: scaleX(0);
-    transform-origin: 100% 50%;
-    transition: transform 0.7s var(--error-ease);
-}
-
 .error-arrow {
-    width: 0.95em;
-    height: 0.95em;
+    width: 1em;
+    height: 1em;
     fill: none;
-    stroke: var(--error-tone);
+    stroke: currentColor;
     stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
     stroke-dasharray: 40;
     stroke-dashoffset: 0;
 }
@@ -221,83 +289,76 @@
     }
 
     .error-line:hover .error-arrow {
-        animation: error-redraw 0.7s var(--error-ease);
+        animation: error-redraw 0.7s var(--ease-out);
     }
-}
-
-.error-line:focus-visible {
-    outline: 2px solid var(--error-tone);
-    outline-offset: 4px;
 }
 
 .error-line:focus-visible .error-line-txt span {
     transform: translateY(-1.2em);
 }
 
-@keyframes error-rise {
-    to { transform: translateY(0); }
-}
-
-@keyframes error-timer {
-    to { transform: scaleX(1); }
-}
-
-@keyframes error-redraw {
-    from { stroke-dashoffset: 40; }
-    to { stroke-dashoffset: 0; }
-}
-
-/* ── Responsive ───────────────────────────────── */
-@media (max-width: 1180px) {
-    .error-page {
-        padding-top: calc(62px + clamp(24px, 5vh, 56px));
-    }
-}
-
+/* ── Celular ── */
 @media (max-width: 560px) {
     .error-foot {
         flex-direction: column;
-        align-items: stretch;
-    }
-
-    .error-line {
-        justify-content: space-between;
+        align-items: flex-start;
     }
 }
 
-@media (max-height: 560px) and (orientation: landscape) {
+/* Celular acostado */
+@media (max-height: 520px) and (orientation: landscape) {
     .error-page {
-        padding-top: calc(62px + 16px);
-        padding-bottom: 16px;
+        padding-top: 96px;
     }
 
-    .error-title {
-        font-size: clamp(32px, 14vh, 72px);
-    }
-
-    .error-title--long {
-        font-size: clamp(22px, 8vh, 40px);
-    }
-
-    .error-timer {
-        margin-top: 20px;
+    .error-inner {
+        gap: 20px;
     }
 }
 
-/* ── Movimiento reducido ──────────────────────── */
+/* ── Animaciones ── */
+@keyframes error-rise {
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes error-fade {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes error-draw {
+    from {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes error-fill {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes error-turn {
+    to {
+        transform: translateX(calc(72px * -6));
+    }
+}
+
+@keyframes error-redraw {
+    from {
+        stroke-dashoffset: 40;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .error-in,
-    .error-timer span {
-        animation: none;
-        transform: none;
-    }
-
-    .error-line-txt span,
-    .error-line::after {
-        transition: none;
-    }
-
-    .error-line:hover .error-arrow {
-        animation: none;
+    .error-page *,
+    .error-page *::before,
+    .error-page *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01ms !important;
     }
 }

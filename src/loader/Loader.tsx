@@ -5,7 +5,7 @@ import { UseTheme } from '../contexts/ThemeContext';
 import { UseLanguage, LANDING, type LandingLocale } from '../contexts/LanguageContext';
 
 interface LoaderProps {
-  /** Texto debajo de los bloques. Si no se pasa, sale del idioma activo. */
+  /** Texto debajo de la marca. Si no se pasa, sale del idioma activo. */
   message?: string;
   /** Si es false, se muestra inline en vez de pantalla completa. */
   fullScreen?: boolean;
@@ -25,11 +25,21 @@ const useLoadingText = (): string => {
   }
 };
 
+// Si el Loader se monta fuera del ThemeProvider, arranca en oscuro.
+const useThemeSafe = (): string => {
+  try {
+    return UseTheme().theme;
+  } catch {
+    return 'dark';
+  }
+};
+
 /**
- * Loader
+ * Loader — Umbral
  * ---------------------------------------------------------
- * Tres bloques que se apilan y se desarman: la misma idea de
- * "construir pieza por pieza" del manifiesto del Home.
+ * La marca de Umbral cargando: el círculo (la vista 360) da la vuelta
+ * completa mientras la puerta se enciende desde abajo, como una luz
+ * que entra por el umbral. Debajo, el horizonte se recorre de punta a punta.
  *
  * Cuando fullScreen=true (default), se renderiza vía createPortal
  * directo en document.body. Esto es a propósito: si el Loader se
@@ -43,8 +53,7 @@ const useLoadingText = (): string => {
  * verdad, sin importar desde dónde se lo llame.
  */
 const Loader: React.FC<LoaderProps> = ({ message, fullScreen = true }) => {
-  const themeContext = UseTheme() as { theme?: 'light' | 'dark' } | undefined;
-  const theme = themeContext?.theme ?? 'dark';
+  const theme = useThemeSafe();
   const fallback = useLoadingText();
   const label = message ?? fallback;
 
@@ -59,11 +68,14 @@ const Loader: React.FC<LoaderProps> = ({ message, fullScreen = true }) => {
       aria-live="polite"
       aria-label={label}
     >
-      <span className="ld-loader-stack" aria-hidden="true">
-        <span className="ld-loader-brick ld-loader-brick--1" />
-        <span className="ld-loader-brick ld-loader-brick--2" />
-        <span className="ld-loader-brick ld-loader-brick--3" />
-      </span>
+      <svg className="ld-loader-mark" viewBox="0 0 32 32" aria-hidden="true">
+        {/* Vista 360: base tenue + arco que da la vuelta */}
+        <circle className="ld-loader-ring-base" cx="16" cy="16" r="13.5" />
+        <circle className="ld-loader-ring" cx="16" cy="16" r="13.5" pathLength="100" />
+        {/* Umbral: la luz sube desde el piso y después se dibuja la puerta */}
+        <path className="ld-loader-light" d="M12.5 29.5V13a3.5 3.5 0 0 1 7 0v16.5Z" />
+        <path className="ld-loader-door" d="M12.5 29.5V13a3.5 3.5 0 0 1 7 0v16.5" pathLength="100" />
+      </svg>
 
       {label && (
         <span className="ld-loader-message" aria-hidden="true">
@@ -71,7 +83,9 @@ const Loader: React.FC<LoaderProps> = ({ message, fullScreen = true }) => {
         </span>
       )}
 
-      <span className="ld-loader-track" aria-hidden="true"><span /></span>
+      <span className="ld-loader-track" aria-hidden="true">
+        <span />
+      </span>
     </div>
   );
 

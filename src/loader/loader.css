@@ -1,33 +1,42 @@
-/* Loader — DeepDev · prefijo ld-loader- */
-@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@500;600&family=Geist:wght@400;500&display=swap");
-
-.ld-loader.theme-dark {
-    --ld-bg: #0A1421;
-    --ld-fg: #E7F3F7;
-    --ld-fg-rgb: 231, 243, 247;
-    --ld-accent: #4B92F4;
-}
-
-.ld-loader.theme-light {
-    --ld-bg: #E7F3F7;
-    --ld-fg: #0A1421;
-    --ld-fg-rgb: 10, 20, 33;
-    --ld-accent: #2F78E8;
-}
+/* ─────────────────────────────────────────────────────────────────────
+   Loader — Umbral
+   Prefijo: ld-loader  ·  Tema escopeado a theme-dark / theme-light
+   La marca carga: el círculo da la vuelta, la puerta se enciende desde
+   abajo y el horizonte se recorre. Sin cajas, sin spinner genérico.
+   ───────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&display=swap");
 
 .ld-loader {
-    --ld-grad: linear-gradient(90deg, #91BEF6, #4B92F4);
-    --ld-ease: cubic-bezier(0.76, 0, 0.24, 1);
+    --font: "Hanken Grotesk", system-ui, sans-serif;
+    --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --cycle: 2.6s;
+    --size: clamp(56px, 6vw, 76px);
 
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 22px;
-    color: var(--ld-fg);
-    font-family: "Geist", system-ui, sans-serif;
-    font-style: normal;
+    gap: 18px;
+    color: var(--fg);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+}
+
+.ld-loader.theme-dark {
+    --bg: #050506;
+    --fg: #f5f5f2;
+    --fg-rgb: 245, 245, 242;
+    --accent: #d4ff3f;
+    --light: #d4ff3f;
+}
+
+.ld-loader.theme-light {
+    --bg: #efede6;
+    --fg: #0b0b0c;
+    --fg-rgb: 11, 11, 12;
+    --accent: #4b6a00;
+    --light: #4b6a00;
 }
 
 .ld-loader *,
@@ -36,101 +45,182 @@
     box-sizing: border-box;
 }
 
+/* Pantalla completa: cuelga del <body> vía portal y tapa todo */
 .ld-loader--fullscreen {
     position: fixed;
     inset: 0;
-    z-index: 2147482000;
-    background: var(--ld-bg);
+    z-index: 2147483000;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--bg);
+    animation: ld-loader-in 0.4s ease both;
 }
 
+/* Inline: ocupa el lugar de lo que está cargando */
 .ld-loader--inline {
+    --size: 44px;
+    gap: 14px;
     width: 100%;
-    min-height: 200px;
+    min-height: 180px;
     padding: 32px 0;
+    background: transparent;
 }
 
-/* ── Bloques que se apilan ────────────────────── */
-/* Ciclo de 2.4 s: cada bloque cae en su lugar (con máscara del suelo),
-   queda armado un momento y la pila se hunde antes de volver a empezar. */
-.ld-loader-stack {
-    position: relative;
-    width: 56px;
-    height: 46px;
-    overflow: hidden;
+/* ── Marca ── */
+.ld-loader-mark {
+    width: var(--size);
+    height: var(--size);
+    overflow: visible;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.ld-loader-brick {
-    position: absolute;
-    height: 12px;
-    border-radius: 1px;
-    transform: translateY(-60px);
-    animation: ld-build 2.4s var(--ld-ease) infinite;
+.ld-loader-ring-base {
+    stroke: rgba(var(--fg-rgb), 0.12);
+    stroke-width: 1;
 }
 
-.ld-loader-brick--1 {
-    left: 0;
-    bottom: 0;
-    width: 56px;
-    background: rgba(var(--ld-fg-rgb), 0.92);
-    animation-delay: 0s;
+/* El arco se dibuja una vuelta entera desde arriba y se borra siguiendo */
+.ld-loader-ring {
+    stroke: var(--accent);
+    stroke-width: 1.4;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transform: rotate(-90deg);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ld-loader-sweep var(--cycle) var(--ease-io) infinite;
 }
 
-.ld-loader-brick--2 {
-    left: 8px;
-    bottom: 16px;
-    width: 40px;
-    background: var(--ld-grad);
-    animation-delay: 0.14s;
+/* Luz dentro de la puerta: sube desde el piso y se apaga */
+.ld-loader-light {
+    fill: var(--light);
+    stroke: none;
+    transform: scaleY(0);
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: ld-loader-light var(--cycle) var(--ease-io) infinite;
 }
 
-.ld-loader-brick--3 {
-    left: 18px;
-    bottom: 32px;
-    width: 20px;
-    background: var(--ld-accent);
-    animation-delay: 0.28s;
+/* La puerta se dibuja una vez y queda */
+.ld-loader-door {
+    stroke: var(--fg);
+    stroke-width: 1.4;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: ld-loader-draw 1s var(--ease-out) 0.1s forwards;
 }
 
-@keyframes ld-build {
-    0% { transform: translateY(-60px); }
-    22%, 66% { transform: translateY(0); }
-    88%, 100% { transform: translateY(60px); }
-}
-
-/* ── Texto y línea ────────────────────────────── */
+/* ── Texto ── */
 .ld-loader-message {
-    font: 500 14px / 1.3 "Geist", system-ui, sans-serif;
-    color: rgba(var(--ld-fg-rgb), 0.64);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: rgba(var(--fg-rgb), 0.62);
+    text-align: center;
 }
 
+/* ── Horizonte: un tramo de acento lo recorre de punta a punta ── */
 .ld-loader-track {
     position: relative;
-    width: 120px;
+    width: clamp(120px, 12vw, 168px);
     height: 1px;
     overflow: hidden;
-    background: rgba(var(--ld-fg-rgb), 0.16);
+    background: rgba(var(--fg-rgb), 0.14);
+}
+
+.ld-loader--inline .ld-loader-track {
+    width: 96px;
 }
 
 .ld-loader-track span {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 40%;
-    background: var(--ld-grad);
+    inset: 0;
+    width: 36%;
+    background: var(--accent);
     transform: translateX(-100%);
-    animation: ld-sweep 1.6s var(--ld-ease) infinite;
+    animation: ld-loader-pan calc(var(--cycle) / 2) var(--ease-io) infinite;
 }
 
-@keyframes ld-sweep {
-    to { transform: translateX(260%); }
+/* ── Animaciones ── */
+@keyframes ld-loader-in {
+    from {
+        opacity: 0;
+    }
 }
 
-/* ── Movimiento reducido: pila armada y quieta ── */
+@keyframes ld-loader-sweep {
+    0% {
+        stroke-dashoffset: 100;
+    }
+
+    48% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: -100;
+    }
+}
+
+@keyframes ld-loader-light {
+    0%,
+    8% {
+        transform: scaleY(0);
+        opacity: 1;
+    }
+
+    48% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scaleY(1);
+        opacity: 0;
+    }
+}
+
+@keyframes ld-loader-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes ld-loader-pan {
+    to {
+        transform: translateX(280%);
+    }
+}
+
+/* Sin movimiento: marca completa y una respiración suave */
 @media (prefers-reduced-motion: reduce) {
-    .ld-loader-brick,
-    .ld-loader-track span {
+    .ld-loader-ring,
+    .ld-loader-door {
+        stroke-dashoffset: 0;
         animation: none;
+    }
+
+    .ld-loader-light {
+        transform: scaleY(1);
+        animation: ld-loader-breathe 2.4s ease-in-out infinite alternate;
+    }
+
+    .ld-loader-track span {
+        width: 100%;
         transform: none;
+        animation: ld-loader-breathe 2.4s ease-in-out infinite alternate;
+    }
+}
+
+@keyframes ld-loader-breathe {
+    from {
+        opacity: 0.25;
+    }
+
+    to {
+        opacity: 0.85;
     }
 }

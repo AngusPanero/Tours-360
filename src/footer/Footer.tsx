@@ -29,7 +29,7 @@ const SOCIALS = [
 ].filter((s) => s.href);
 
 // TODO (Angus): rutas reales de privacidad y términos.
-const LEGAL = { privacy: "/policy-privacy", terms: "/policy-terms" };
+const LEGAL = { privacy: "/policy-privacy", terms: "/policy-terms", cookies: "/policy-cookies" };
 
 const PAGES = [
     { to: "/estudio", label: "Estudio" },
@@ -54,6 +54,7 @@ const T = {
     made: "Un estudio de DeepDev",            // TODO (Angus): confirmar crédito
     privacy: "Privacidad",
     terms: "Términos",
+    cookies: "Cookies",
     backTop: "Volver arriba",
 };
 
@@ -271,6 +272,7 @@ const Footer = () => {
                     <nav className="footer-umb-legal" aria-label="Legales">
                         <NavLink to={LEGAL.privacy}>{T.privacy}</NavLink>
                         <NavLink to={LEGAL.terms}>{T.terms}</NavLink>
+                        <NavLink to={LEGAL.cookies}>{T.cookies}</NavLink>
                     </nav>
 
                     <button type="button" className="footer-umb-top" onClick={scrollTop} aria-label={T.backTop}>

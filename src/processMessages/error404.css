@@ -1,42 +1,51 @@
-/* Página 404 — DeepDev · prefijo nf- */
-@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700&family=Geist:wght@300;400;500;600&display=swap");
+/* ─────────────────────────────────────────────────────────────────────
+   Error 404 — Umbral
+   Prefijo: nf-  ·  Tema escopeado a theme-dark / theme-light
+   La cuenta regresiva es una regla de rumbo 360°: en los segundos de espera
+   la escena da una vuelta completa y la línea se llena hasta volver al inicio.
+   ───────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Hanken+Grotesk:wght@400;500;600&display=swap");
+
+.nf-page {
+    --display: "Archivo", "Hanken Grotesk", system-ui, sans-serif;
+    --font: "Hanken Grotesk", system-ui, sans-serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --mx: max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-left));
+    --line: rgba(var(--fg-rgb), 0.14);
+    --muted: rgba(var(--fg-rgb), 0.62);
+    --faint: rgba(var(--fg-rgb), 0.28);
+    --wait: 5s; /* igual a REDIRECT_S */
+
+    position: relative;
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(96px, 15vh, 168px) var(--mx) clamp(32px, 6vh, 72px);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: clamp(15px, 1.1vw, 17px);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    transition: background-color 0.6s ease, color 0.6s ease;
+}
 
 .nf-page.theme-dark {
-    --nf-bg: #0A1421;
-    --nf-fg: #E7F3F7;
-    --nf-fg-rgb: 231, 243, 247;
-    --nf-accent: #4B92F4;
-    --nf-tone: #4B92F4;
+    --bg: #050506;
+    --fg: #f5f5f2;
+    --fg-rgb: 245, 245, 242;
+    --accent: #d4ff3f;
+    --accent-fill: #d4ff3f;
 }
 
 .nf-page.theme-light {
-    --nf-bg: #E7F3F7;
-    --nf-fg: #0A1421;
-    --nf-fg-rgb: 10, 20, 33;
-    --nf-accent: #2F78E8;
-    --nf-tone: #2F78E8;
-}
-
-.nf-page {
-    --nf-display: "Funnel Display", "Geist", system-ui, sans-serif;
-    --nf-font: "Geist", system-ui, sans-serif;
-    --nf-grad: linear-gradient(90deg, #91BEF6, #4B92F4);
-    --nf-line: rgba(var(--nf-fg-rgb), 0.16);
-    --nf-ease: cubic-bezier(0.16, 1, 0.3, 1);
-
-    box-sizing: border-box;
-    display: flex;
-    align-items: flex-end;
-    min-height: 100vh;
-    min-height: 100svh;
-    /* arriba deja lugar al navbar fijo del sitio */
-    padding: calc(80px + clamp(24px, 6vh, 72px)) max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-right))
-        max(clamp(28px, 6vh, 64px), env(safe-area-inset-bottom)) max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-left));
-    background: var(--nf-bg);
-    color: var(--nf-fg);
-    font-family: var(--nf-font);
-    font-style: normal;
-    overflow-x: clip;
+    --bg: #efede6;
+    --fg: #0b0b0c;
+    --fg-rgb: 11, 11, 12;
+    --accent: #4b6a00;
+    --accent-fill: #d4ff3f;
 }
 
 .nf-page *,
@@ -45,110 +54,170 @@
     box-sizing: border-box;
 }
 
-.nf-inner {
-    width: 100%;
-    container-type: inline-size;
+.nf-page :where(h1, p) {
+    margin: 0;
 }
 
-/* ── Rótulo ───────────────────────────────────── */
+.nf-page :where(button) {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.nf-page :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.nf-page ::selection {
+    background: var(--accent-fill);
+    color: #050506;
+}
+
+.nf-inner {
+    display: grid;
+    gap: clamp(20px, 3.6vh, 44px);
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* ── Rótulo: raya de acento + texto ── */
 .nf-label {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 0 0 clamp(20px, 3vh, 32px);
-    font: 500 14px / 1.3 var(--nf-font);
-    color: rgba(var(--nf-fg-rgb), 0.64);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--muted);
+    opacity: 0;
+    animation: nf-fade 0.9s var(--ease-out) 0.1s forwards;
 }
 
 .nf-dash {
+    flex: none;
     width: 28px;
     height: 1px;
-    background: var(--nf-tone);
+    background: var(--accent);
+    transform-origin: left;
+    animation: nf-draw 0.9s var(--ease-out) 0.2s both;
 }
 
-/* ── Título con máscara ───────────────────────── */
+/* ── Título: cada palabra sube desde atrás de una línea ── */
 .nf-title {
-    margin: 0;
-    max-width: 16ch;
-    font: 500 clamp(44px, min(8.6cqi, 15vh), 168px) / 0.92 var(--nf-display);
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.24em;
+    max-width: 15ch;
+    font-family: var(--display);
+    font-stretch: 122%;
+    font-weight: 600;
+    font-size: clamp(44px, min(8.2vw, 15vh), 168px);
+    line-height: 0.9;
     letter-spacing: -0.05em;
-    text-wrap: balance;
 }
 
 .nf-title--long {
-    max-width: 24ch;
-    font-size: clamp(30px, min(4.8cqi, 8vh), 84px);
-    line-height: 1;
-    letter-spacing: -0.04em;
+    max-width: 22ch;
+    font-size: clamp(34px, min(5.4vw, 10vh), 104px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
 }
 
 .nf-mask {
     display: inline-block;
-    max-width: 100%;
     overflow: hidden;
     padding-bottom: 0.1em;
-    margin: 0 0.24em -0.1em 0;
-    vertical-align: top;
+    margin-bottom: -0.1em;
 }
 
 .nf-in {
     display: inline-block;
-    max-width: 100%;
-    /* una palabra larga (ej: el ID de un incidente) pasa a la línea siguiente */
-    overflow-wrap: anywhere;
     transform: translateY(110%);
-    animation: nf-rise 1.1s var(--nf-ease) forwards;
-    animation-delay: calc(min(var(--d), 14) * 55ms + 120ms);
+    animation: nf-rise 1.1s var(--ease-out) forwards;
+    animation-delay: calc(0.18s + var(--d) * 65ms);
 }
 
 .nf-accent {
-    background: var(--nf-grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--accent);
 }
 
-/* ── Línea que se completa en 5 s ─────────────── */
+/* ── Regla de rumbo: las marcas corren, la línea se llena ── */
 .nf-timer {
     position: relative;
-    height: 1px;
-    margin-top: clamp(32px, 7vh, 88px);
-    background: var(--nf-line);
+    height: 30px;
     overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
+/* Línea base y su relleno con el tiempo de espera */
+.nf-timer::before,
+.nf-timer::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+}
+
+.nf-timer::before {
+    background: var(--line);
+}
+
+.nf-timer::after {
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: nf-fill var(--wait) linear forwards;
+}
+
+/* Marcas: chicas cada 12px, grandes cada 72px. Corren una vuelta completa */
 .nf-timer span {
     position: absolute;
-    inset: 0;
-    background: var(--nf-grad);
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    animation: nf-timer 5s linear forwards;
+    top: 1px;
+    left: 0;
+    width: calc(100% + 72px * 6);
+    height: 100%;
+    background:
+        repeating-linear-gradient(90deg, rgba(var(--fg-rgb), 0.42) 0 1px, transparent 1px 72px) 0 0 / 100% 14px no-repeat,
+        repeating-linear-gradient(90deg, rgba(var(--fg-rgb), 0.18) 0 1px, transparent 1px 12px) 0 0 / 100% 7px no-repeat;
+    animation: nf-turn var(--wait) cubic-bezier(0.45, 0, 0.2, 1) forwards;
 }
 
-/* ── Pie: cuenta regresiva + botón tipo línea ─── */
+/* ── Pie: aviso de redirección + botón ── */
 .nf-foot {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 16px 32px;
-    padding-top: clamp(16px, 2.4vh, 24px);
+    opacity: 0;
+    animation: nf-fade 0.9s var(--ease-out) 0.5s forwards;
 }
 
 .nf-redirect {
-    margin: 0;
-    font: 400 clamp(15px, 1.1vw, 17px) / 1.5 var(--nf-font);
-    color: rgba(var(--nf-fg-rgb), 0.64);
+    color: var(--muted);
+    text-wrap: pretty;
 }
 
 .nf-sec {
     display: inline-block;
     min-width: 1ch;
-    color: var(--nf-fg);
+    font-family: var(--display);
+    font-stretch: 112%;
+    font-weight: 600;
+    color: var(--accent);
     font-variant-numeric: tabular-nums;
+    text-align: center;
 }
 
+/* ── Botón tipo línea ── */
 .nf-line {
     position: relative;
     display: inline-flex;
@@ -156,13 +225,31 @@
     gap: 0.5em;
     min-height: 44px;
     padding: 0.3em 0 0.38em;
-    border: 0;
-    background: none;
-    color: var(--nf-fg);
-    font: 500 clamp(18px, 1.5vw, 22px) / 1 var(--nf-display);
+    font: 500 clamp(16px, 1.15vw, 18px) / 1 var(--display);
+    font-stretch: 108%;
     letter-spacing: -0.015em;
     white-space: nowrap;
-    cursor: pointer;
+}
+
+.nf-line::before,
+.nf-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+}
+
+.nf-line::before {
+    background: var(--line);
+}
+
+.nf-line::after {
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform 0.7s var(--ease-out);
 }
 
 .nf-line-txt {
@@ -174,38 +261,19 @@
 
 .nf-line-txt span {
     display: inline-block;
-    text-shadow: 0 1.2em 0 var(--nf-tone);
-    transition: transform 0.6s var(--nf-ease);
+    text-shadow: 0 1.2em 0 var(--accent);
+    transition: transform 0.6s var(--ease-out);
     transition-delay: calc(var(--i) * 14ms);
 }
 
-.nf-line::before,
-.nf-line::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1.5px;
-}
-
-.nf-line::before {
-    background: rgba(var(--nf-fg-rgb), 0.9);
-}
-
-.nf-line::after {
-    background: var(--nf-grad);
-    transform: scaleX(0);
-    transform-origin: 100% 50%;
-    transition: transform 0.7s var(--nf-ease);
-}
-
 .nf-arrow {
-    width: 0.95em;
-    height: 0.95em;
+    width: 1em;
+    height: 1em;
     fill: none;
-    stroke: var(--nf-tone);
+    stroke: currentColor;
     stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
     stroke-dasharray: 40;
     stroke-dashoffset: 0;
 }
@@ -221,124 +289,124 @@
     }
 
     .nf-line:hover .nf-arrow {
-        animation: nf-redraw 0.7s var(--nf-ease);
+        animation: nf-redraw 0.7s var(--ease-out);
     }
-}
-
-.nf-line:focus-visible {
-    outline: 2px solid var(--nf-tone);
-    outline-offset: 4px;
 }
 
 .nf-line:focus-visible .nf-line-txt span {
     transform: translateY(-1.2em);
 }
 
-/* ── 404 gigante ──────────────────────────────── */
+/* ── 404: número gigante; el 0 es una escena vacía (solo contorno) ── */
 .nf-code {
     display: flex;
-    margin: 0 0 clamp(12px, 2vh, 24px);
-    font: 500 clamp(96px, min(26cqi, 34vh), 360px) / 0.8 var(--nf-display);
+    gap: 0.02em;
+    margin-bottom: clamp(-12px, -1vh, -4px);
+    font-family: var(--display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: clamp(96px, min(22vw, 24vh), 340px);
+    line-height: 0.8;
     letter-spacing: -0.06em;
     font-variant-numeric: tabular-nums;
 }
 
+/* Aire para que el contorno del 0 no quede recortado por la máscara */
 .nf-code .nf-mask {
-    margin-right: 0;
+    padding-inline: 0.04em;
+    margin-inline: -0.04em;
 }
 
 .nf-digit {
     display: inline-block;
     transform: translateY(110%);
-    animation: nf-rise 1.2s var(--nf-ease) forwards;
-    animation-delay: calc(var(--d) * 70ms + 80ms);
+    animation: nf-rise 1.2s var(--ease-out) forwards;
+    animation-delay: calc(var(--d) * 70ms);
 }
 
-.nf-page .nf-title {
-    font-size: clamp(32px, min(5.6cqi, 10vh), 104px);
-    line-height: 0.94;
+.nf-code .nf-accent {
+    color: transparent;
+    -webkit-text-stroke: max(1.5px, 0.012em) var(--accent);
+}
+
+/* Con el número arriba, el título baja un escalón */
+.nf-code ~ .nf-title {
+    max-width: 20ch;
+    font-size: clamp(28px, min(4.4vw, 7.4vh), 84px);
+    line-height: 0.95;
     letter-spacing: -0.045em;
 }
 
-.nf-page .nf-in {
-    animation-delay: calc(var(--d) * 55ms + 360ms);
+.nf-code ~ .nf-title .nf-in {
+    animation-delay: calc(0.32s + var(--d) * 55ms);
 }
 
-@media (max-height: 560px) and (orientation: landscape) {
-    .nf-code {
-        font-size: clamp(64px, 30vh, 140px);
-    }
-
-    .nf-page .nf-title {
-        font-size: clamp(24px, 9vh, 44px);
-    }
+.nf-code ~ .nf-title--long {
+    font-size: clamp(26px, min(3.6vw, 7vh), 68px);
 }
 
-@keyframes nf-rise {
-    to { transform: translateY(0); }
-}
-
-@keyframes nf-timer {
-    to { transform: scaleX(1); }
-}
-
-@keyframes nf-redraw {
-    from { stroke-dashoffset: 40; }
-    to { stroke-dashoffset: 0; }
-}
-
-/* ── Responsive ───────────────────────────────── */
-@media (max-width: 1180px) {
-    .nf-page {
-        padding-top: calc(62px + clamp(24px, 5vh, 56px));
-    }
-}
-
+/* ── Celular ── */
 @media (max-width: 560px) {
     .nf-foot {
         flex-direction: column;
-        align-items: stretch;
-    }
-
-    .nf-line {
-        justify-content: space-between;
+        align-items: flex-start;
     }
 }
 
-@media (max-height: 560px) and (orientation: landscape) {
+/* Celular acostado */
+@media (max-height: 520px) and (orientation: landscape) {
     .nf-page {
-        padding-top: calc(62px + 16px);
-        padding-bottom: 16px;
+        padding-top: 96px;
     }
 
-    .nf-title {
-        font-size: clamp(32px, 14vh, 72px);
-    }
-
-    .nf-title--long {
-        font-size: clamp(22px, 8vh, 40px);
-    }
-
-    .nf-timer {
-        margin-top: 20px;
+    .nf-inner {
+        gap: 20px;
     }
 }
 
-/* ── Movimiento reducido ──────────────────────── */
+/* ── Animaciones ── */
+@keyframes nf-rise {
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes nf-fade {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes nf-draw {
+    from {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes nf-fill {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes nf-turn {
+    to {
+        transform: translateX(calc(72px * -6));
+    }
+}
+
+@keyframes nf-redraw {
+    from {
+        stroke-dashoffset: 40;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .nf-in,
-    .nf-timer span,
-    .nf-digit {
-        animation: none;
-        transform: none;
-    }
-
-    .nf-line-txt span,
-    .nf-line::after {
-        transition: none;
-    }
-
-    .nf-line:hover .nf-arrow {
-        animation: none;
+    .nf-page *,
+    .nf-page *::before,
+    .nf-page *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01ms !important;
     }
 }
