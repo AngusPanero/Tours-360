@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Zonas privadas: no deben aparecer en Google.
+# Esto no las protege (eso lo hacen PrivateRoute y el back); solo evita que se indexen.
+Disallow: /admin
+Disallow: /dashboard
+
+Sitemap: https://www.deepdev.com.ar/sitemap.xml

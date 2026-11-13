@@ -1,0 +1,17 @@
+{
+    "id": "/",
+    "name": "DeepDev Studio",
+    "short_name": "DeepDev",
+    "description": "Estudio digital: webs, apps móviles, software a medida y automatizaciones. Argentina y Europa.",
+    "lang": "es-AR",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "theme_color": "#0A1421",
+    "background_color": "#0A1421",
+    "icons": [
+        { "src": "/logos/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "/logos/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "/logos/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+}

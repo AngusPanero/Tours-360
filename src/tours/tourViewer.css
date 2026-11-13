@@ -1,0 +1,627 @@
+/* ─────────────────────────────────────────────────────────────────────
+   TourViewer — visor público de tours 360 (/tour/:slug)
+   Prefijo: tv-  ·  El acento llega por --tv-accent (color elegido en el admin)
+   ───────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Hanken+Grotesk:wght@400;500;600&display=swap");
+
+.tv-root {
+    --tv-accent: #d4ff3f;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background: #050506;
+    color: #f5f5f2;
+    font-family: "Hanken Grotesk", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+}
+
+.tv-root *,
+.tv-root *::before,
+.tv-root *::after {
+    box-sizing: border-box;
+}
+
+.tv-root--preview {
+    height: 100%;
+}
+
+.tv-root :where(button) {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.tv-root :focus-visible {
+    outline: 1px solid var(--tv-accent);
+    outline-offset: 3px;
+}
+
+.tv-stage {
+    position: absolute;
+    inset: 0;
+}
+
+.tv-kicker {
+    margin: 0 0 6px;
+    font-size: 13px;
+    color: rgba(245, 245, 242, 0.72);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tv-kicker::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--tv-accent);
+}
+
+/* ── Título de la escena ── */
+.tv-head {
+    position: absolute;
+    top: clamp(16px, 3vw, 36px);
+    left: clamp(16px, 3vw, 40px);
+    max-width: min(70vw, 720px);
+    z-index: 20;
+    pointer-events: none;
+    text-shadow: 0 1px 24px rgba(0, 0, 0, 0.45);
+}
+
+.tv-scene {
+    margin: 0;
+    overflow: hidden;
+    font-family: "Archivo", "Hanken Grotesk", sans-serif;
+    font-stretch: 116%;
+    font-weight: 500;
+    font-size: clamp(30px, 5vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.035em;
+}
+
+/* Entra con máscara cada vez que cambia la escena (el key la remonta) */
+.tv-scene span {
+    display: inline-block;
+    padding-bottom: 0.08em;
+    animation: tv-mask-in 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) both;
+}
+
+@keyframes tv-mask-in {
+    from { transform: translateY(105%); }
+    to   { transform: translateY(0); }
+}
+
+/* ── Plantas ── */
+.tv-floors {
+    position: absolute;
+    top: clamp(16px, 3vw, 36px);
+    right: clamp(16px, 3vw, 40px);
+    z-index: 20;
+    display: flex;
+    gap: 22px;
+}
+
+.tv-floors button {
+    position: relative;
+    padding: 6px 0;
+    font-size: 14px;
+    color: rgba(245, 245, 242, 0.62);
+    text-shadow: 0 1px 16px rgba(0, 0, 0, 0.5);
+    transition: color 0.25s;
+}
+
+.tv-floors button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--tv-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.tv-floors button:hover {
+    color: #f5f5f2;
+}
+
+.tv-floors button.is-active {
+    color: #f5f5f2;
+}
+
+.tv-floors button.is-active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* ── Controles ── */
+.tv-controls {
+    position: absolute;
+    right: clamp(16px, 3vw, 40px);
+    bottom: clamp(16px, 3vw, 36px);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    background: rgba(5, 5, 6, 0.5);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.tv-controls button {
+    width: 42px;
+    height: 42px;
+    font-size: 17px;
+    line-height: 42px;
+    color: rgba(245, 245, 242, 0.85);
+    transition: color 0.2s, background 0.2s;
+}
+
+.tv-controls button + button {
+    border-top: 1px solid rgba(245, 245, 242, 0.1);
+}
+
+.tv-controls button:hover {
+    color: #f5f5f2;
+    background: rgba(245, 245, 242, 0.08);
+}
+
+.tv-controls button.is-active {
+    color: var(--tv-accent);
+}
+
+/* ── Galería ── */
+.tv-rail {
+    position: absolute;
+    left: clamp(16px, 3vw, 40px);
+    right: calc(clamp(16px, 3vw, 40px) + 62px);
+    bottom: clamp(16px, 3vw, 36px);
+    z-index: 20;
+    transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.4s;
+}
+
+.tv-rail.is-closed {
+    transform: translateY(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tv-rail ol {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 4px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+}
+
+.tv-rail ol::-webkit-scrollbar {
+    display: none;
+}
+
+.tv-rail li {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+.tv-rail button {
+    position: relative;
+    display: block;
+    width: clamp(132px, 13vw, 184px);
+    text-align: left;
+}
+
+.tv-rail img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    filter: saturate(0.85) brightness(0.8);
+    transition: filter 0.4s, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tv-rail button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: var(--tv-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.tv-rail button:hover img {
+    filter: saturate(1) brightness(0.95);
+}
+
+.tv-rail button.is-active img {
+    filter: saturate(1) brightness(1);
+}
+
+.tv-rail button.is-active::after {
+    transform: scaleX(1);
+}
+
+.tv-rail__num,
+.tv-rail__name {
+    position: absolute;
+    left: 10px;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+.tv-rail__num {
+    top: 8px;
+    font-size: 11px;
+    color: rgba(245, 245, 242, 0.75);
+    font-variant-numeric: tabular-nums;
+}
+
+.tv-rail__name {
+    right: 10px;
+    bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Pasos entre escenas ── */
+.psv-virtual-tour-link {
+    cursor: pointer;
+}
+
+.tv-link {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+}
+
+.tv-link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(245, 245, 242, 0.5);
+    animation: tv-breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes tv-breathe {
+    0%, 100% { transform: scale(0.82); opacity: 0.9; }
+    50%      { transform: scale(1);    opacity: 0.25; }
+}
+
+.tv-link__ring {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(5, 5, 6, 0.45);
+    border: 1px solid #f5f5f2;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.3s, border-color 0.3s, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tv-link svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #f5f5f2;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.3s;
+}
+
+.tv-link.is-down svg {
+    transform: scaleY(-1);
+}
+
+.tv-link__label {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 6px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 10px;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: #f5f5f2;
+    background: rgba(5, 5, 6, 0.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 6px);
+    transition: opacity 0.25s, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tv-link__label:empty {
+    display: none;
+}
+
+.tv-link__label em {
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--tv-accent);
+}
+
+.psv-virtual-tour-link:hover .tv-link__label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* En pantallas táctiles no hay hover: el nombre queda siempre visible */
+@media (hover: none) {
+    .tv-link__label {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+.psv-virtual-tour-link:hover .tv-link__ring {
+    background: var(--tv-accent);
+    border-color: var(--tv-accent);
+    transform: scale(1.1);
+}
+
+.psv-virtual-tour-link:hover .tv-link svg {
+    stroke: #050506;
+}
+
+/* ── Puntos de info ── */
+.tv-info {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+.tv-info__dot {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--tv-accent);
+    box-shadow: 0 0 0 0 rgba(245, 245, 242, 0.5);
+    animation: tv-ping 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tv-info:hover .tv-info__dot {
+    transform: scale(1.15);
+}
+
+.tv-info svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #050506;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+@keyframes tv-ping {
+    0%   { box-shadow: 0 0 0 0 rgba(245, 245, 242, 0.45); }
+    70%  { box-shadow: 0 0 0 12px rgba(245, 245, 242, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 245, 242, 0); }
+}
+
+/* ── Tooltips y panel lateral de PSV ── */
+.tv-root .psv-tooltip {
+    background: rgba(5, 5, 6, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 0;
+    box-shadow: none;
+    font-family: "Hanken Grotesk", sans-serif;
+}
+
+.tv-root .psv-tooltip-content {
+    font-size: 13px;
+    padding: 2px 4px;
+}
+
+.tv-root .psv-tooltip-arrow {
+    display: none;
+}
+
+.tv-root .psv-virtual-tour-tooltip img {
+    display: block;
+    width: 180px;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    margin-bottom: 6px;
+}
+
+.tv-root .psv-panel {
+    background: rgba(8, 8, 9, 0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    color: #f5f5f2;
+    font-family: "Hanken Grotesk", sans-serif;
+    user-select: text;
+}
+
+.tv-root .psv-panel-resizer {
+    background: transparent;
+    border-left: 1px solid rgba(245, 245, 242, 0.1);
+}
+
+.tv-root .psv-panel-close-button {
+    color: rgba(245, 245, 242, 0.7);
+}
+
+.tv-panel {
+    padding: 64px 28px 32px;
+}
+
+.tv-panel h3 {
+    margin: 0 0 18px;
+    font-family: "Archivo", "Hanken Grotesk", sans-serif;
+    font-stretch: 116%;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+}
+
+.tv-panel p {
+    margin: 0 0 22px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(245, 245, 242, 0.78);
+}
+
+.tv-panel a {
+    display: inline-block;
+    padding-bottom: 3px;
+    font-size: 14px;
+    color: var(--tv-accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+}
+
+.tv-root .psv-loader-container {
+    display: none;
+}
+
+/* ── Carga ── */
+.tv-loader {
+    position: absolute;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(24px, 5vw, 64px);
+    background: #050506;
+    transition: opacity 0.8s ease 0.1s, visibility 0s linear 0.9s;
+}
+
+.tv-loader.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.tv-loader__title {
+    margin: 0 0 28px;
+    font-family: "Archivo", "Hanken Grotesk", sans-serif;
+    font-stretch: 116%;
+    font-weight: 500;
+    font-size: clamp(36px, 7vw, 104px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+}
+
+.tv-loader__line {
+    position: relative;
+    display: block;
+    height: 1px;
+    background: rgba(245, 245, 242, 0.12);
+    overflow: hidden;
+}
+
+.tv-loader__line::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--tv-accent);
+    transform-origin: left;
+    animation: tv-load 1.6s cubic-bezier(0.7, 0, 0.2, 1) infinite;
+}
+
+@keyframes tv-load {
+    0%   { transform: scaleX(0) translateX(0); }
+    60%  { transform: scaleX(1) translateX(0); }
+    100% { transform: scaleX(1) translateX(100%); }
+}
+
+/* ── No disponible ── */
+.tv-root--message {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(24px, 5vw, 64px);
+}
+
+.tv-message {
+    max-width: 14ch;
+    margin: 0;
+    font-family: "Archivo", "Hanken Grotesk", sans-serif;
+    font-stretch: 116%;
+    font-weight: 500;
+    font-size: clamp(36px, 6vw, 88px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+}
+
+/* ── Móvil ── */
+@media (max-width: 640px) {
+    .tv-head {
+        max-width: calc(100% - 32px);
+    }
+
+    .tv-floors {
+        top: auto;
+        right: auto;
+        left: 16px;
+        bottom: 132px;
+    }
+
+    .tv-rail {
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .tv-rail button {
+        width: 116px;
+    }
+
+    .tv-controls {
+        bottom: auto;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .tv-controls button {
+        width: 38px;
+        height: 38px;
+        line-height: 38px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tv-scene span,
+    .tv-link::before,
+    .tv-info__dot,
+    .tv-loader__line::after {
+        animation: none;
+    }
+}

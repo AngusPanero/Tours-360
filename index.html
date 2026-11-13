@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport-fit=cover permite que la web se dibuje debajo del notch / barra de estado -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Color de la barra del navegador: navy del sitio en oscuro, claro en tema claro -->
+    <meta name="theme-color" content="#0A1421" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#E7F3F7" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Si la agregan a la pantalla de inicio (modo app) -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="DeepDev" />
+    <meta name="application-name" content="DeepDev" />
+
+    <!-- ── SEO básico ── -->
+    <title>DeepDev Studio · Desarrollo web, apps y software a medida</title>
+    <meta
+      name="description"
+      content="Estudio de desarrollo de alta gama. Diseñamos y construimos webs, apps iOS y Android, software a medida, CRM y automatizaciones. Equipo en Argentina, España y Suiza."
+    />
+    <meta name="author" content="DeepDev Studio" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://www.deepdev.com.ar/" />
+
+    <!-- ── Iconos (archivos en public/logos/, el manifest en public/) ──
+         Logo 3D sobre fondo navy. Sin favicon.svg: si queda, el navegador lo
+         prefiere a los PNG y mostraría el ícono viejo. -->
+    <link rel="icon" href="/logos/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/logos/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/logos/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/logos/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logos/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- ── Open Graph (WhatsApp, Facebook, LinkedIn) ── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DeepDev Studio" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:locale:alternate" content="de_CH" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:url" content="https://www.deepdev.com.ar/" />
+    <meta property="og:title" content="DeepDev Studio · Desarrollo web, apps y software a medida" />
+    <meta
+      property="og:description"
+      content="Construimos productos digitales con identidad propia: webs, apps, software a medida y automatizaciones. Desde Argentina, España y Suiza."
+    />
+    <!-- TODO (Angus): subir og-image.jpg de 1200×630 a public/ -->
+    <meta property="og:image" content="https://www.deepdev.com.ar/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="DeepDev Studio — Desarrollo web, apps y software a medida" />
+
+    <!-- ── Twitter / X ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DeepDev Studio · Desarrollo web, apps y software a medida" />
+    <meta
+      name="twitter:description"
+      content="Webs, apps iOS y Android, software a medida y automatizaciones. Equipo en Argentina, España y Suiza."
+    />
+    <meta name="twitter:image" content="https://www.deepdev.com.ar/og-image.jpg" />
+
+    <!-- ── Fuentes: Funnel Display (títulos) + Geist (texto) ── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700&family=Geist:wght@300;400;500;600&display=swap"
+    />
+
+    <!-- ── Datos estructurados (Google) ── -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://www.deepdev.com.ar/#organizacion",
+            "name": "DeepDev Studio",
+            "alternateName": "DeepDev",
+            "url": "https://www.deepdev.com.ar/",
+            "logo": "https://www.deepdev.com.ar/logos/icon-512.png",
+            "image": "https://www.deepdev.com.ar/og-image.jpg",
+            "email": "contact@deepdevstudio.com",
+            "description": "Estudio de desarrollo de alta gama: webs, apps iOS y Android, software a medida, CRM, mantenimiento y automatizaciones.",
+            "areaServed": ["AR", "ES", "CH", "Europe"],
+            "knowsAbout": [
+              "Desarrollo web",
+              "Aplicaciones iOS y Android",
+              "Software a medida",
+              "CRM",
+              "Automatizaciones",
+              "Identidad de marca",
+              "Mantenimiento y escalamiento"
+            ],
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "telephone": "+54-9-11-7118-7463",
+                "email": "contact@deepdevstudio.com",
+                "areaServed": "AR",
+                "availableLanguage": ["es"]
+              },
+              {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "telephone": "+34-622-777-426",
+                "email": "contact@deepdevstudio.com",
+                "areaServed": "ES",
+                "availableLanguage": ["es", "en"]
+              },
+              {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "telephone": "+41-77-928-10-82",
+                "email": "contact@deepdevstudio.com",
+                "areaServed": "CH",
+                "availableLanguage": ["de", "en"]
+              }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://www.deepdev.com.ar/#sitio",
+            "url": "https://www.deepdev.com.ar/",
+            "name": "DeepDev Studio",
+            "inLanguage": ["es-AR", "es-ES", "de-CH", "en"],
+            "publisher": { "@id": "https://www.deepdev.com.ar/#organizacion" }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      DeepDev Studio: estudio de desarrollo de alta gama. Webs, apps iOS y Android, software a medida, CRM y
+      automatizaciones, con equipo en Argentina, España y Suiza.
+      contact@deepdevstudio.com · AR +54 9 11 7118 7463 · ES +34 622 777 426 · CH +41 77 928 10 82.
+      Activá JavaScript para ver la web.
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

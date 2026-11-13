@@ -1,0 +1,602 @@
+/* ─────────────────────────────────────────────────────────────────────
+   Contact — Umbral
+   Prefijo: con-  ·  Tema escopeado a theme-dark / theme-light
+   Regla: se ordena con escala tipográfica, líneas finas y aire. Sin cajas.
+   ───────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Hanken+Grotesk:wght@400;500;600&display=swap");
+
+.con {
+    --display: "Archivo", "Hanken Grotesk", system-ui, sans-serif;
+    --font: "Hanken Grotesk", system-ui, sans-serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+    --mx: max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-left));
+    --line: rgba(var(--fg-rgb), 0.14);
+    --muted: rgba(var(--fg-rgb), 0.62);
+    --faint: rgba(var(--fg-rgb), 0.28);
+
+    position: relative;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: clamp(15px, 1.1vw, 17px);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    transition: background-color 0.6s var(--ease-io), color 0.6s var(--ease-io);
+}
+
+.con.theme-dark {
+    --bg: #050506;
+    --bg-2: #0c0c0d;
+    --fg: #f5f5f2;
+    --fg-rgb: 245, 245, 242;
+    --accent: #d4ff3f;
+    --accent-fill: #d4ff3f;
+    --danger: #ff5a4e;
+}
+
+.con.theme-light {
+    --bg: #efede6;
+    --bg-2: #e6e3d9;
+    --fg: #0b0b0c;
+    --fg-rgb: 11, 11, 12;
+    --accent: #4b6a00;
+    --accent-fill: #d4ff3f;
+    --danger: #c8321f;
+}
+
+.con *,
+.con *::before,
+.con *::after {
+    box-sizing: border-box;
+}
+
+.con :where(a) {
+    color: inherit;
+    text-decoration: none;
+}
+
+.con :where(button) {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.con :where(h1, h2, h3, p, ul, ol, dl, dd) {
+    margin: 0;
+}
+
+.con :where(ul, ol) {
+    padding: 0;
+    list-style: none;
+}
+
+.con :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.con ::selection {
+    background: var(--accent-fill);
+    color: #050506;
+}
+
+/* Rótulo: 01 / Texto */
+.con-label {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--muted);
+}
+
+.con-label span {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+.con-label i {
+    font-style: normal;
+    color: var(--faint);
+}
+
+/* Palabra que sube desde atrás de una línea */
+.con-mask {
+    display: inline;
+}
+
+.con-mask__clip {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+}
+
+.con-mask__word {
+    display: inline-block;
+    will-change: transform;
+}
+
+.con-head {
+    display: grid;
+    gap: clamp(18px, 2.4vw, 32px);
+    padding: 0 var(--mx);
+    margin-bottom: clamp(40px, 6vw, 88px);
+}
+
+.con-h2 {
+    max-width: 16ch;
+    font-family: var(--display);
+    font-stretch: 112%;
+    font-weight: 500;
+    font-size: clamp(36px, min(5.4vw, 10vh), 104px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+}
+
+/* Hero de página: rótulo + título en dos líneas, la segunda en acento */
+.con-hero {
+    display: grid;
+    gap: clamp(24px, 3vw, 40px);
+    padding: clamp(150px, 20vh, 220px) var(--mx) clamp(80px, 11vw, 160px);
+}
+
+.con-hero__title {
+    display: grid;
+    font-family: var(--display);
+    font-stretch: 122%;
+    font-weight: 600;
+    font-size: clamp(48px, min(9vw, 17vh), 196px);
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+}
+
+.con-hero__accent {
+    padding-left: clamp(0px, 9vw, 160px);
+}
+
+.con-hero__accent .con-mask__word {
+    color: var(--accent);
+}
+
+.con-hero__intro {
+    max-width: 46ch;
+    color: var(--muted);
+    font-size: clamp(16px, 1.3vw, 20px);
+    text-wrap: pretty;
+}
+
+/* ── Enlace / botón tipo línea ── */
+.con-line {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.3em 0 0.38em;
+    font: 500 clamp(16px, 1.15vw, 18px) / 1 var(--display);
+    font-stretch: 108%;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+}
+
+.con-line::before,
+.con-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+}
+
+.con-line::before {
+    background: var(--line);
+}
+
+.con-line::after {
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.con-line__txt {
+    display: inline-flex;
+    overflow: hidden;
+    height: 1.2em;
+    line-height: 1.2em;
+}
+
+.con-line__txt span {
+    display: inline-block;
+    text-shadow: 0 1.2em 0 var(--accent);
+    transition: transform 0.6s var(--ease-out);
+    transition-delay: calc(var(--i) * 14ms);
+}
+
+.con-line__arrow {
+    width: 1em;
+    height: 1em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.5s var(--ease-out);
+}
+
+.con-line__ext {
+    color: var(--accent);
+}
+
+.con-line--xl {
+    font-size: clamp(24px, 3.6vw, 60px);
+    letter-spacing: -0.035em;
+}
+
+.con-line--xl::before,
+.con-line--xl::after {
+    height: 1.5px;
+}
+
+.con-line--xl::before {
+    background: var(--fg);
+}
+
+@media (hover: hover) {
+    .con-line:hover .con-line__txt span {
+        transform: translateY(-1.2em);
+    }
+
+    .con-line:hover::after {
+        transform: scaleX(1);
+        transform-origin: 0 50%;
+    }
+
+    .con-line:hover .con-line__arrow {
+        transform: translateX(4px);
+    }
+}
+
+.con-line:focus-visible .con-line__txt span {
+    transform: translateY(-1.2em);
+}
+
+.con-cta {
+    display: grid;
+    justify-items: center;
+    padding: clamp(100px, 13vw, 200px) var(--mx);
+    border-top: 1px solid var(--line);
+}
+
+.con-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* ═══════════════════ CUERPO ═══════════════════ */
+.con-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+    gap: clamp(40px, 7vw, 120px);
+    padding: clamp(40px, 5vw, 72px) var(--mx) clamp(100px, 13vw, 180px);
+    border-top: 1px solid var(--line);
+}
+
+.con-form {
+    display: grid;
+    gap: clamp(28px, 3.4vw, 44px);
+}
+
+/* La frase: texto grande con campos que son palabras */
+.con-sentence {
+    font-family: var(--display);
+    font-stretch: 112%;
+    font-weight: 500;
+    font-size: clamp(26px, min(3.6vw, 6.4vh), 60px);
+    line-height: 1.32;
+    letter-spacing: -0.035em;
+    text-wrap: pretty;
+}
+
+.con-slot {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: baseline;
+}
+
+.con-slot input,
+.con-slot select {
+    max-width: 100%;
+    min-width: 3ch;
+    padding: 0 0 0.04em;
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid var(--line);
+    border-radius: 0;
+    outline: none;
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--accent);
+    transition: border-color 0.3s, width 0.2s;
+}
+
+.con-slot input::placeholder {
+    color: var(--faint);
+}
+
+.con-slot input:focus,
+.con-slot select:focus {
+    border-bottom-color: var(--accent);
+}
+
+.con-slot input:focus-visible,
+.con-slot select:focus-visible {
+    outline: none;
+}
+
+.con-slot--select select {
+    appearance: none;
+    cursor: pointer;
+    padding-right: 0.7em;
+    box-sizing: content-box;
+    background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%), linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+    background-position: calc(100% - 0.32em) 58%, calc(100% - 0.12em) 58%;
+    background-size: 0.2em 0.2em;
+    background-repeat: no-repeat;
+}
+
+.con-slot--select option {
+    font-size: 16px;
+    color: var(--fg);
+    background: var(--bg);
+}
+
+.con-slot.is-wrong input {
+    border-bottom-color: var(--danger);
+}
+
+/* Autocompletado sin fondo amarillo */
+.con-slot input:-webkit-autofill,
+.con-more textarea:-webkit-autofill {
+    -webkit-text-fill-color: var(--accent);
+    -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+}
+
+/* Mensaje opcional */
+.con-more {
+    display: grid;
+    gap: 10px;
+    max-width: 760px;
+}
+
+.con-more__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.con-more textarea {
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    outline: none;
+    resize: vertical;
+    font-family: var(--font);
+    font-size: clamp(16px, 1.2vw, 18px);
+    line-height: 1.55;
+    color: var(--fg);
+    transition: border-color 0.3s;
+}
+
+.con-more textarea::placeholder {
+    color: var(--faint);
+}
+
+.con-more textarea:focus {
+    border-bottom-color: var(--accent);
+}
+
+/* Trampa para bots: fuera de pantalla */
+.con-trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Aceptación legal */
+.con-legal {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    max-width: 640px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.con-legal input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.con-legal__box {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    border: 1px solid var(--faint);
+    border-radius: 2px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.con-legal__box svg {
+    fill: none;
+    stroke: #050506;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16;
+    stroke-dashoffset: 16;
+    transition: stroke-dashoffset 0.4s var(--ease-out);
+}
+
+.con-legal input:checked + .con-legal__box {
+    background: var(--accent-fill);
+    border-color: var(--accent-fill);
+}
+
+.con-legal input:checked + .con-legal__box svg {
+    stroke-dashoffset: 0;
+}
+
+.con-legal input:focus-visible + .con-legal__box {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.con-legal.is-wrong .con-legal__box {
+    border-color: var(--danger);
+}
+
+.con-legal a {
+    color: var(--fg);
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.2s;
+}
+
+.con-legal a:hover {
+    border-bottom-color: var(--accent);
+}
+
+/* Mensajes */
+.con-feedback {
+    display: grid;
+    gap: 6px;
+}
+
+.con-feedback:empty {
+    display: none;
+}
+
+.con-msg {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--danger);
+}
+
+.con-msg span {
+    flex-shrink: 0;
+    width: 18px;
+    height: 1px;
+    margin-top: 0.75em;
+    background: currentColor;
+}
+
+.con-actions {
+    display: flex;
+}
+
+.con-line--xl:disabled {
+    opacity: 0.4;
+    cursor: wait;
+}
+
+/* Enviado */
+.con-done {
+    display: grid;
+    justify-items: start;
+    gap: 28px;
+    align-content: start;
+}
+
+.con-done__text {
+    max-width: 18ch;
+    font-family: var(--display);
+    font-stretch: 116%;
+    font-weight: 500;
+    font-size: clamp(32px, min(4.6vw, 8vh), 80px);
+    line-height: 1;
+    letter-spacing: -0.045em;
+    color: var(--accent);
+}
+
+/* Directo */
+.con-direct {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 10px;
+    padding-top: 14px;
+}
+
+.con-direct .con-label {
+    margin-bottom: 8px;
+}
+
+/* ═══════════════════ RESPONSIVE ═══════════════════ */
+@media (max-width: 879px) {
+    .con-body {
+        grid-template-columns: 1fr;
+    }
+
+    .con-direct {
+        padding-top: 32px;
+        border-top: 1px solid var(--line);
+    }
+}
+
+@media (max-width: 560px) {
+    .con-sentence {
+        font-size: clamp(22px, 7vw, 30px);
+        line-height: 1.45;
+    }
+
+    .con-line--xl {
+        font-size: clamp(22px, 7vw, 30px);
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .con-slot input,
+    .con-slot select {
+        font-size: max(16px, 1em) !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .con *,
+    .con *::before,
+    .con *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

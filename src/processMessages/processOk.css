@@ -1,0 +1,346 @@
+/* Proceso completado — DeepDev · prefijo process- */
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700&family=Geist:wght@300;400;500;600&display=swap");
+
+.process-page.theme-dark {
+    --process-bg: #0A1421;
+    --process-fg: #E7F3F7;
+    --process-fg-rgb: 231, 243, 247;
+    --process-accent: #4B92F4;
+    --process-tone: #4B92F4;
+}
+
+.process-page.theme-light {
+    --process-bg: #E7F3F7;
+    --process-fg: #0A1421;
+    --process-fg-rgb: 10, 20, 33;
+    --process-accent: #2F78E8;
+    --process-tone: #2F78E8;
+}
+
+.process-page {
+    --process-display: "Funnel Display", "Geist", system-ui, sans-serif;
+    --process-font: "Geist", system-ui, sans-serif;
+    --process-grad: linear-gradient(90deg, #91BEF6, #4B92F4);
+    --process-line: rgba(var(--process-fg-rgb), 0.16);
+    --process-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100vh;
+    min-height: 100svh;
+    /* arriba deja lugar al navbar fijo del sitio */
+    padding: calc(80px + clamp(24px, 6vh, 72px)) max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-right))
+        max(clamp(28px, 6vh, 64px), env(safe-area-inset-bottom)) max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-left));
+    background: var(--process-bg);
+    color: var(--process-fg);
+    font-family: var(--process-font);
+    font-style: normal;
+    overflow-x: clip;
+}
+
+.process-page *,
+.process-page *::before,
+.process-page *::after {
+    box-sizing: border-box;
+}
+
+.process-inner {
+    width: 100%;
+    container-type: inline-size;
+}
+
+/* ── Rótulo ───────────────────────────────────── */
+.process-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(20px, 3vh, 32px);
+    font: 500 14px / 1.3 var(--process-font);
+    color: rgba(var(--process-fg-rgb), 0.64);
+}
+
+.process-dash {
+    width: 28px;
+    height: 1px;
+    background: var(--process-tone);
+}
+
+/* ── Título con máscara ───────────────────────── */
+.process-title {
+    margin: 0;
+    max-width: 16ch;
+    font: 500 clamp(44px, min(8.6cqi, 15vh), 168px) / 0.92 var(--process-display);
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+}
+
+.process-title--long {
+    max-width: 24ch;
+    font-size: clamp(30px, min(4.8cqi, 8vh), 84px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.process-mask {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    padding-bottom: 0.1em;
+    margin: 0 0.24em -0.1em 0;
+    vertical-align: top;
+}
+
+.process-in {
+    display: inline-block;
+    max-width: 100%;
+    /* una palabra larga (ej: el ID de un incidente) pasa a la línea siguiente */
+    overflow-wrap: anywhere;
+    transform: translateY(110%);
+    animation: process-rise 1.1s var(--process-ease) forwards;
+    animation-delay: calc(min(var(--d), 14) * 55ms + 120ms);
+}
+
+.process-accent {
+    background: var(--process-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ── Línea que se completa en 5 s ─────────────── */
+.process-timer {
+    position: relative;
+    height: 1px;
+    margin-top: clamp(32px, 7vh, 88px);
+    background: var(--process-line);
+    overflow: hidden;
+}
+
+.process-timer span {
+    position: absolute;
+    inset: 0;
+    background: var(--process-grad);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    animation: process-timer 5s linear forwards;
+}
+
+/* ── Pie: cuenta regresiva + botón tipo línea ─── */
+.process-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    padding-top: clamp(16px, 2.4vh, 24px);
+}
+
+.process-redirect {
+    margin: 0;
+    font: 400 clamp(15px, 1.1vw, 17px) / 1.5 var(--process-font);
+    color: rgba(var(--process-fg-rgb), 0.64);
+}
+
+.process-sec {
+    display: inline-block;
+    min-width: 1ch;
+    color: var(--process-fg);
+    font-variant-numeric: tabular-nums;
+}
+
+.process-line {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    min-height: 44px;
+    padding: 0.3em 0 0.38em;
+    border: 0;
+    background: none;
+    color: var(--process-fg);
+    font: 500 clamp(18px, 1.5vw, 22px) / 1 var(--process-display);
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.process-line-txt {
+    display: inline-flex;
+    overflow: hidden;
+    height: 1.2em;
+    line-height: 1.2em;
+}
+
+.process-line-txt span {
+    display: inline-block;
+    text-shadow: 0 1.2em 0 var(--process-tone);
+    transition: transform 0.6s var(--process-ease);
+    transition-delay: calc(var(--i) * 14ms);
+}
+
+.process-line::before,
+.process-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.5px;
+}
+
+.process-line::before {
+    background: rgba(var(--process-fg-rgb), 0.9);
+}
+
+.process-line::after {
+    background: var(--process-grad);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform 0.7s var(--process-ease);
+}
+
+.process-arrow {
+    width: 0.95em;
+    height: 0.95em;
+    fill: none;
+    stroke: var(--process-tone);
+    stroke-width: 1.6;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 0;
+}
+
+@media (hover: hover) {
+    .process-line:hover .process-line-txt span {
+        transform: translateY(-1.2em);
+    }
+
+    .process-line:hover::after {
+        transform: scaleX(1);
+        transform-origin: 0 50%;
+    }
+
+    .process-line:hover .process-arrow {
+        animation: process-redraw 0.7s var(--process-ease);
+    }
+}
+
+.process-line:focus-visible {
+    outline: 2px solid var(--process-tone);
+    outline-offset: 4px;
+}
+
+.process-line:focus-visible .process-line-txt span {
+    transform: translateY(-1.2em);
+}
+
+/* ── Tilde que se dibuja ──────────────────────── */
+.process-mark {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    fill: none;
+    stroke: var(--process-tone);
+    stroke-width: 1.6;
+    stroke-linecap: square;
+}
+
+.process-mark-dash {
+    stroke-dasharray: 18;
+    stroke-dashoffset: 0;
+    animation: process-undraw 0.4s var(--process-ease) 0.3s forwards;
+}
+
+.process-mark-tick {
+    stroke-dasharray: 26;
+    stroke-dashoffset: 26;
+    animation: process-draw 0.7s var(--process-ease) 0.6s forwards;
+}
+
+@keyframes process-undraw {
+    to { stroke-dashoffset: -18; }
+}
+
+@keyframes process-draw {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes process-rise {
+    to { transform: translateY(0); }
+}
+
+@keyframes process-timer {
+    to { transform: scaleX(1); }
+}
+
+@keyframes process-redraw {
+    from { stroke-dashoffset: 40; }
+    to { stroke-dashoffset: 0; }
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 1180px) {
+    .process-page {
+        padding-top: calc(62px + clamp(24px, 5vh, 56px));
+    }
+}
+
+@media (max-width: 560px) {
+    .process-foot {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .process-line {
+        justify-content: space-between;
+    }
+}
+
+@media (max-height: 560px) and (orientation: landscape) {
+    .process-page {
+        padding-top: calc(62px + 16px);
+        padding-bottom: 16px;
+    }
+
+    .process-title {
+        font-size: clamp(32px, 14vh, 72px);
+    }
+
+    .process-title--long {
+        font-size: clamp(22px, 8vh, 40px);
+    }
+
+    .process-timer {
+        margin-top: 20px;
+    }
+}
+
+/* ── Movimiento reducido ──────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .process-in,
+    .process-timer span,
+    .process-mark-dash,
+    .process-mark-tick {
+        animation: none;
+        transform: none;
+    }
+
+    .process-line-txt span,
+    .process-line::after {
+        transition: none;
+    }
+
+    .process-line:hover .process-arrow {
+        animation: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .process-mark-dash {
+        stroke-dashoffset: -18;
+    }
+
+    .process-mark-tick {
+        stroke-dashoffset: 0;
+    }
+}
